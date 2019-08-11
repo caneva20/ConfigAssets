@@ -35,8 +35,8 @@ public class MyConfig : Config<MyConfig> {
 }
 ```
 
-And lastly just call `YOUR_CLASS_NAME.Instance.YOUR_FIELD`
-int valueFromConfig = MyConfig.Instance.myInt;
+And lastly, just call `YOUR_CLASS_NAME.Instance.YOUR_FIELD`
+
 ``` C#
 int valueFromConfig = MyConfig.Instance.myInt;
 ```

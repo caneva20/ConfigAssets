@@ -46,3 +46,13 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+
+/.idea
+/Assets/Plugins
+/Assets/Plugins.meta
+/Assets/Scenes
+/Assets/Scenes.meta
+/Assets/Configurations
+/Assets/Configurations.meta
+/Packages
+/ProjectSettings

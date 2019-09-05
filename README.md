@@ -4,10 +4,10 @@ Simple &amp; Lightweight solution creating and loading config assets for Unity p
 ## Install
 
 Find `Packages/manifest.json` in your project and edit it to look like this:
-```js
+```json
 {
   "dependencies": {
-    "caneva20.config-assets": "https://github.com/caneva20/ConfigAssets.git#master",
+    "caneva20.config-assets": "https://github.com/caneva20/ConfigAssets.git#0.1.0-preview.1",
     ...
   },
 }
@@ -35,8 +35,8 @@ public class MyConfig : Config<MyConfig> {
 }
 ```
 
-And lastly just call `YOUR_CLASS_NAME.Instance.YOUR_FIELD`
-int valueFromConfig = MyConfig.Instance.myInt;
+And lastly, just call `YOUR_CLASS_NAME.Instance.YOUR_FIELD`
+
 ``` C#
 int valueFromConfig = MyConfig.Instance.myInt;
 ```

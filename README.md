@@ -7,7 +7,7 @@ Find `Packages/manifest.json` in your project and edit it to look like this:
 ```json
 {
   "dependencies": {
-    "caneva20.config-assets": "https://github.com/caneva20/ConfigAssets.git#0.1.0-preview.1",
+    "caneva20.config-assets": "https://github.com/caneva20/ConfigAssets.git#0.2.0-preview.3",
     ...
   },
 }

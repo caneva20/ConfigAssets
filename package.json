@@ -1,7 +1,7 @@
 {
   "name": "caneva20.config-assets",
   "displayName": "Config Assets",
-  "version": "0.1.0-preview.1",
+  "version": "0.2.0-preview.3",
   "unity": "2018.1",
   "description": "Simple & Lightweight solution for creating and loading config assets for Unity projects",
   "keywords": ["caneva20", "lghtweight", "config"]

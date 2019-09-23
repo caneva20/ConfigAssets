@@ -1,21 +1,30 @@
 using System;
 using System.IO;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
 
-namespace caneva20.ConfigAssets {
+#endif
+
+namespace caneva20.ConfigAssets.Loading {
     public static class ConfigLoader {
         public static T Load<T>(Action<LoaderOptions<T>> optionsCreator = null) where T : ScriptableObject {
             var options = new LoaderOptions<T>();
             optionsCreator?.Invoke(options);
             
+        #if UNITY_EDITOR
+            foreach (var assetGuid in AssetDatabase.FindAssets($"t:{typeof(T).Name}")) {
+                AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(assetGuid));
+            }
+        #endif
+
             var config = Resources.FindObjectsOfTypeAll<T>().FirstOrDefault();
-            
-            return config ? config : CreateConfig(options);
+
+            return config ? config : CreateConfigAsset(options);
         }
 
-        private static T CreateConfig<T>(LoaderOptions<T> options) where T : ScriptableObject {
+        internal static T CreateConfigAsset<T>(LoaderOptions<T> options) where T : ScriptableObject {
             var config = ScriptableObject.CreateInstance<T>();
 
         #if UNITY_EDITOR
@@ -26,8 +35,9 @@ namespace caneva20.ConfigAssets {
             }
 
             var path = $"Assets/{options.DirPath}{options.AssetName}";
-            
+
             AssetDatabase.CreateAsset(config, path);
+            AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         #endif
 

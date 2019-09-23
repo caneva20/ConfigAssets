@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace caneva20.ConfigAssets {
+namespace caneva20.ConfigAssets.Loading {
     public struct LoaderOptions<T> {
         private static Defaults _config = Defaults.Instance;
 

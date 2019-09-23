@@ -51,5 +51,5 @@ crashlytics-build.properties
 /Plugins.meta
 /Scenes
 /Scenes.meta
-/Configurations
+/Configurations/*
 /Configurations.meta

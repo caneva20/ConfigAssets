@@ -2,6 +2,9 @@
 Simple &amp; Lightweight solution creating and loading config assets for Unity projects
 
 ## Install
+Use [UpmGitExtension](https://github.com/mob-sakai/UpmGitExtension) (Recommended/Easier)
+
+**Or**
 
 Find `Packages/manifest.json` in your project and edit it to look like this:
 ```json
@@ -12,9 +15,6 @@ Find `Packages/manifest.json` in your project and edit it to look like this:
   },
 }
 ```
-### Or
-You may also use [UpmGitExtension](https://github.com/mob-sakai/UpmGitExtension)
-
 
 ## Usage
 First create a class and extend from `Config<T>`

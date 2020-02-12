@@ -12,6 +12,10 @@ openupm add caneva20.config-assets
 
 **Or**
 
+Use [UpmGitExtension](https://github.com/mob-sakai/UpmGitExtension)
+
+**Or**	
+
 Find `Packages/manifest.json` in your project and edit it to look like this:
 ```json
 {

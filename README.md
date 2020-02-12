@@ -1,7 +1,17 @@
 # Config Assets
+[![openupm](https://img.shields.io/npm/v/caneva20.config-assets?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/caneva20.config-assets/)
+
 Simple &amp; Lightweight solution creating and loading config assets for Unity projects
 
 ## Install
+The package is available on the [openupm registry](https://openupm.com). It's recommended to install it via [openupm-cli](https://github.com/openupm/openupm-cli).
+
+```
+openupm add caneva20.config-assets
+```
+
+**Or**
+
 Use [UpmGitExtension](https://github.com/mob-sakai/UpmGitExtension) (Recommended/Easier)
 
 **Or**
@@ -29,7 +39,7 @@ Then add as many fields as you need, note that it must be Serializable by Unity 
 public class MyConfig : Config<MyConfig> {
     [SerializeField] private string _myString;
     [SerializeField] private bool _myBool = true;
-    
+
     //This also works
     public int myInt;
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace caneva20.ConfigAssets {
+namespace me.caneva20.ConfigAssets {
     public class Defaults : Config<Defaults> {
         [SerializeField] private string _baseDirectory = "Configurations\\Resources";
         [SerializeField] private bool _appendNamespaceToFile = true;

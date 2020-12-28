@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
-namespace caneva20.ConfigAssets.Editor {
+namespace me.caneva20.ConfigAssets.Editor {
     [CustomEditor(typeof(Defaults))]
     public class DefaultsEditor : UnityEditor.Editor {
         private readonly Regex _resourcesFolder = new Regex("[Rr]esources");

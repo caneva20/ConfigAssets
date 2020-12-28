@@ -1,7 +1,7 @@
-using caneva20.ConfigAssets.Loading;
+using me.caneva20.ConfigAssets.Loading;
 using UnityEngine;
 
-namespace caneva20.ConfigAssets {
+namespace me.caneva20.ConfigAssets {
     public class Config : ScriptableObject { }
 
     public class Config<T> : Config where T : Config {

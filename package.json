@@ -4,5 +4,10 @@
   "version": "0.3.0-preview",
   "unity": "2018.1",
   "description": "Simple & Lightweight solution for creating and loading config assets for Unity projects",
-  "keywords": ["caneva20", "lghtweight", "config"]
+  "keywords": ["caneva20", "lghtweight", "config"],
+  "author": {
+    "name": "Fabricio Caneva (caneva20)",
+    "email": "hardlymersk@gmail.com",
+    "url": "caneva20.me"
+  } 
 }

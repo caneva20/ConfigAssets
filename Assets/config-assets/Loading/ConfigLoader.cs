@@ -7,7 +7,7 @@ using UnityEditor;
 
 #endif
 
-namespace caneva20.ConfigAssets.Loading {
+namespace me.caneva20.ConfigAssets.Loading {
     public static class ConfigLoader {
         public static T Load<T>(Action<LoaderOptions<T>> optionsCreator = null) where T : ScriptableObject {
             var options = new LoaderOptions<T>();

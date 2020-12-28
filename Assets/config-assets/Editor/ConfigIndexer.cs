@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Callbacks;
 
-namespace caneva20.ConfigAssets.Editor {
+namespace me.caneva20.ConfigAssets.Editor {
     public static class ConfigIndexer {
         [DidReloadScripts]
         private static void OnScriptReload() {

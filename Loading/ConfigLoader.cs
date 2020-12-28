@@ -25,16 +25,28 @@ namespace me.caneva20.ConfigAssets.Loading {
             return Load<T>(MakeSaveDirectoryPath(), MakeAssetName(typeof(T)));
         }
 
-        private static T Load<T>(string dirPath, string assetName) where T : ScriptableObject {
+        public static object Load(Type type) {
+            LoadDefaults();
+
+            return Load(type, MakeSaveDirectoryPath(), MakeAssetName(type));
+        }
+
+        private static T Load<T>(string dirPath, string assetName)
+            where T : ScriptableObject {
+            return (T) Load(typeof(T), dirPath, assetName);
+        }
+
+        private static object Load(Type type, string dirPath, string assetName) {
         #if UNITY_EDITOR
-            foreach (var assetGuid in AssetDatabase.FindAssets($"t:{typeof(T).Name}")) {
-                AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(assetGuid));
+            foreach (var assetGuid in AssetDatabase.FindAssets($"t:{type.Name}")) {
+                AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(assetGuid), type);
             }
         #endif
 
-            var config = Resources.FindObjectsOfTypeAll<T>().FirstOrDefault();
+            var config = Resources.FindObjectsOfTypeAll(type)
+               .FirstOrDefault();
 
-            return config ? config : (T)CreateConfigAsset(typeof(T), dirPath, assetName);
+            return (config ? config : CreateConfigAsset(type, dirPath, assetName));
         }
 
         private static string MakeSaveDirectoryPath() {
@@ -44,7 +56,7 @@ namespace me.caneva20.ConfigAssets.Loading {
 
             return $@"{_defaults.BaseDirectory}\";
         }
-        
+
         private static string MakeAssetName(Type type) {
             var assetName = $"{type.Name}.asset";
             var ns = type.Namespace;
@@ -65,7 +77,7 @@ namespace me.caneva20.ConfigAssets.Loading {
 
             return $"{append}.{assetName}";
         }
-        
+
         internal static object CreateConfigAsset(Type type, string dirPath, string assetName) {
             var config = ScriptableObject.CreateInstance(type);
 

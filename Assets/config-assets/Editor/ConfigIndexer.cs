@@ -65,12 +65,19 @@ namespace me.caneva20.ConfigAssets.Editor {
             builder.Append("\t}\n");
             builder.Append("\n");
              
-            foreach (var config in configs) {
-                var name = config.FullName?.Replace(".", "") ?? $"A{Guid.NewGuid()}";
+            foreach (var configType in configs) {
+                var attribute = ConfigAttribute.Find(configType);
+
+                if (attribute?.EnableProvider == false) {
+                    continue;
+                }
+                
+                var name = configType.FullName?.Replace(".", "") ?? $"A{Guid.NewGuid()}";
+                var displayName = attribute?.DisplayName ?? configType.Name;
 
                 builder.Append("\t[SettingsProvider]\n");
                 builder.Append($"\tpublic static SettingsProvider Create{name}Provider() {{\n");
-                builder.Append($"\t\treturn CreateProvider<{config.FullName}>(\"{config.Name}\");\n");
+                builder.Append($"\t\treturn CreateProvider<{configType.FullName}>(\"{displayName}\");\n");
                 builder.Append("\t}\n");
                 builder.Append("\n");
             }

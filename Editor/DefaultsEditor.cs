@@ -7,6 +7,7 @@ namespace me.caneva20.ConfigAssets.Editor {
     [CustomEditor(typeof(Defaults))]
     public class DefaultsEditor : UnityEditor.Editor {
         private readonly Regex _resourcesFolder = new Regex("[Rr]esources");
+        private readonly Regex _editorFolder = new Regex("[Ee]ditor");
 
         private SerializedProperty _baseDirectory;
         private SerializedProperty _codeGenDirectory;
@@ -33,8 +34,19 @@ namespace me.caneva20.ConfigAssets.Editor {
 
             #endregion
 
-            DirectorySelector(_codeGenDirectory, "Resources",
+            #region Code gen directory
+
+            if (!_editorFolder.IsMatch(_codeGenDirectory.stringValue)) {
+                EditorGUILayout.HelpBox(
+                    "CodeGen directory MUST contain an 'Editor' folder or be inside one",
+                    MessageType.Error);
+            }
+            
+            DirectorySelector(_codeGenDirectory, "Editor",
                 "The directory used to save auto-generated files");
+
+            #endregion
+            
 
             Prop(_appendNamespaceToFile,
                 "Should the namespace of the class be appended to the file name of the asset?\n\n" +

@@ -58,7 +58,9 @@ namespace me.caneva20.ConfigAssets.Loading {
         }
 
         private static string MakeAssetName(Type type) {
-            var assetName = $"{type.Name}.asset";
+            var attribute = ConfigAttribute.Find(type);
+
+            var assetName = $"{attribute?.FileName ?? type.Name}.asset";
             var ns = type.Namespace;
 
             if (!_defaults.AppendNamespaceToFile || ns == null) {

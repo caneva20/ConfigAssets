@@ -24,49 +24,59 @@ namespace me.caneva20.ConfigAssets.Editor {
         public override void OnInspectorGUI() {
             #region Base directory
 
-            DirectorySelector(_baseDirectory, "Resources", "The base directory used to store the configs");
+            using (new EditorGUILayout.VerticalScope("box")) {
+                DirectorySelector(_baseDirectory, "Resources",
+                    "This directory is used to store the .asset files");
 
-            if (!_resourcesFolder.IsMatch(_baseDirectory.stringValue)) {
-                EditorGUILayout.HelpBox(
-                    "Base directory MUST contain a 'Resources' folder or be inside one",
-                    MessageType.Error);
+                if (!_resourcesFolder.IsMatch(_baseDirectory.stringValue)) {
+                    EditorGUILayout.HelpBox(
+                        "This directory MUST contain a 'Resources' folder or be inside one",
+                        MessageType.Error);
+                }
             }
 
             #endregion
 
             #region Code gen directory
 
-            if (!_editorFolder.IsMatch(_codeGenDirectory.stringValue)) {
-                EditorGUILayout.HelpBox(
-                    "CodeGen directory MUST contain an 'Editor' folder or be inside one",
-                    MessageType.Error);
+            using (new EditorGUILayout.VerticalScope("box")) {
+                DirectorySelector(_codeGenDirectory, "Editor",
+                    "This directory is used to store auto-generated files");
+
+                if (!_editorFolder.IsMatch(_codeGenDirectory.stringValue)) {
+                    EditorGUILayout.HelpBox(
+                        "This directory MUST contain an 'Editor' folder or be inside one",
+                        MessageType.Error);
+                }
             }
-            
-            DirectorySelector(_codeGenDirectory, "Editor",
-                "The directory used to save auto-generated files");
 
             #endregion
-            
 
-            Prop(_appendNamespaceToFile,
-                "Should the namespace of the class be appended to the file name of the asset?\n\n" +
-                "NOTE: This setting is ignored for classes with no namespace");
+            using (new EditorGUILayout.VerticalScope("box")) {
+                Prop(_appendNamespaceToFile,
+                    "Should the namespace of the class be appended to the file name of the .asset?\n\n" +
+                    "NOTE: This setting is ignored for classes with no namespace");
 
-            if (_appendNamespaceToFile.boolValue) {
-                EditorGUI.indentLevel++;
-                Prop(_nameSpaceLength,
-                    "How many segments of the namespace should be used?\n\n" +
-                    "0: None\n-1: The full namespace\n\nNOTE: Segments are the sum of dots(.) in the namespace plus 1, i.e caneva20.ConfigAssets = 2");
+                if (_appendNamespaceToFile.boolValue) {
+                    using (new EditorGUILayout.VerticalScope("box")) {
+                        EditorGUI.indentLevel++;
+                        Prop(_nameSpaceLength,
+                            "How many segments of the namespace should be used?\n\n" +
+                            "0: None\n-1: The full namespace\n\nNOTE: Segments are the sum of dots(.) in the namespace plus 1, i.e caneva20.ConfigAssets = 2");
 
-                EditorGUI.indentLevel--;
+                        EditorGUI.indentLevel--;
+                    }
+                }
             }
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        private static void DirectorySelector(SerializedProperty property, string defaultDirectory, string info) {
-            EditorGUILayout.HelpBox(info, MessageType.Info);
-            
+        private static void DirectorySelector(
+            SerializedProperty property,
+            string defaultDirectory,
+            string description
+        ) {
             using (new EditorGUILayout.HorizontalScope()) {
                 EditorGUILayout.LabelField($"{property.displayName}\t Assets\\");
                 property.stringValue = EditorGUILayout.TextField(property.stringValue);
@@ -81,12 +91,18 @@ namespace me.caneva20.ConfigAssets.Editor {
                     property.stringValue = path;
                 }
             }
+
+            EditorGUI.indentLevel++;
+            EditorGUILayout.LabelField($"- {description}");
+            EditorGUI.indentLevel--;
         }
 
-        private static void Prop(SerializedProperty property, string info) {
+        private static void Prop(SerializedProperty property, string description) {
             EditorGUILayout.PropertyField(property);
 
-            EditorGUILayout.HelpBox(info, MessageType.Info);
+            EditorGUI.indentLevel++;
+            EditorGUILayout.LabelField($"- {description}");
+            EditorGUI.indentLevel--;
         }
     }
 }

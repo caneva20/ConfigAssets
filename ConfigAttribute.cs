@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 
 namespace me.caneva20.ConfigAssets {
     [AttributeUsage(AttributeTargets.Class)]
@@ -6,6 +7,8 @@ namespace me.caneva20.ConfigAssets {
         public string FileName { get; set; }
         public string DisplayName { get; set; }
         public bool EnableProvider { get; set; } = true;
+        public SettingsScope Scope { get; set; } = SettingsScope.Project;
+        public string[] Keywords { get; set; } = { };
 
         public static ConfigAttribute Find<T>() where T : Config {
             return Find(typeof(T));

@@ -55,37 +55,51 @@ namespace me.caneva20.ConfigAssets.Editor {
             builder.Append("////////////////////////////////////////////////////////////////////////////////\n");
             builder.Append("\n");
             builder.Append("using me.caneva20.ConfigAssets;\n");
+            builder.Append("using System.Collections.Generic;\n");
             builder.Append("using UnityEditor;\n");
             builder.Append("\n");
             builder.Append("public static class ConfigAssetsSettingsProvider {\n");
-            builder.Append("\tprivate static SettingsProvider CreateProvider<T>(string name) where T : Config<T> {\n");
-            builder.Append("\t\treturn new SettingsProvider($\"Config assets/{name}\") {\n");
-            builder.Append("\t\t\tguiHandler = _ => Editor.CreateEditor(Config<T>.Instance).OnInspectorGUI()\n");
+            builder.Append(
+                "\tprivate static SettingsProvider CreateProvider<T>(string name, SettingsScope scope, IEnumerable<string> keywords) where T : Config<T> {\n");
+            builder.Append(
+                "\t\treturn new SettingsProvider($\"Config assets/{name}\", scope, keywords) {\n");
+            builder.Append(
+                "\t\t\tguiHandler = _ => Editor.CreateEditor(Config<T>.Instance).OnInspectorGUI()\n");
             builder.Append("\t\t};\n");
             builder.Append("\t}\n");
             builder.Append("\n");
-             
+
             foreach (var configType in configs) {
                 var attribute = ConfigAttribute.Find(configType);
 
                 if (attribute?.EnableProvider == false) {
                     continue;
                 }
-                
+
                 var name = configType.FullName?.Replace(".", "") ?? $"A{Guid.NewGuid()}";
                 var displayName = attribute?.DisplayName ?? configType.Name;
+                var scope = $"{nameof(SettingsScope)}.{attribute?.Scope ?? SettingsScope.Project}";
+                var keywords =
+                    $"new string[] {{{string.Join(", ", (attribute?.Keywords ?? new string[] { }).Select(x => $"\"{x}\""))}}}";
+
+                if (string.IsNullOrEmpty(keywords)) {
+                    keywords = "null";
+                }
 
                 builder.Append("\t[SettingsProvider]\n");
                 builder.Append($"\tpublic static SettingsProvider Create{name}Provider() {{\n");
-                builder.Append($"\t\treturn CreateProvider<{configType.FullName}>(\"{displayName}\");\n");
+                builder.Append(
+                    $"\t\treturn CreateProvider<{configType.FullName}>(\"{displayName}\", {scope}, {keywords});\n");
                 builder.Append("\t}\n");
                 builder.Append("\n");
             }
-            
+
             builder.Append("}\n");
-            
-            File.WriteAllText($@"Assets/{Defaults.Instance.CodeGenDirectory}/ConfigAssetsSettingsProvider.cs", builder.ToString());
-            
+
+            File.WriteAllText(
+                $@"Assets/{Defaults.Instance.CodeGenDirectory}/ConfigAssetsSettingsProvider.cs",
+                builder.ToString());
+
             AssetDatabase.Refresh();
         }
     }

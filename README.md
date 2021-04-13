@@ -42,3 +42,10 @@ Whenever you get back to unity a new `.asset` file will be created for your conf
 To access and configure/change your configuration file there's two options:
 1. Find your `.asset` file, usually under `Configurations>Resources`
 2. Through Unity's `Project Settings` under `Edit>Project Settings...` in the toolbar, and then selecting the desired configuration under the `Config assets` section
+
+## Customization
+You may add a `[Config]` attribute to your config class ir order to customize some of its properties:
+```C#
+[Config(Scope = SettingsScope.User)]
+public class MyConfig : Config<MyConfig> { }
+```

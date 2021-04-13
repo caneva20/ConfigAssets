@@ -1,13 +1,13 @@
 {
   "name": "me.caneva20.config-assets",
   "displayName": "Config Assets",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "unity": "2018.1",
   "description": "Simple & Lightweight solution for creating and loading config assets for Unity projects",
   "keywords": ["caneva20", "lightweight", "config"],
   "author": {
     "name": "Fabricio Caneva (caneva20)",
     "email": "hardlymersk@gmail.com",
-    "url": "caneva20.me"
+    "url": "https://caneva20.me"
   } 
 }

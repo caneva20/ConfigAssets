@@ -44,7 +44,7 @@ To access and configure/change your configuration file there's two options:
 2. Through Unity's `Project Settings` under `Edit>Project Settings...` in the toolbar, and then selecting the desired configuration under the `Config assets` section
 
 ## Customization
-You may add a `[Config]` attribute to your config class ir order to customize some of its properties:
+You may add a `[Config]` attribute to your config class in order to customize some of its properties:
 ```C#
 [Config(Scope = SettingsScope.User)]
 public class MyConfig : Config<MyConfig> { }

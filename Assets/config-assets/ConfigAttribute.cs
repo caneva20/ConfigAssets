@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 
 namespace me.caneva20.ConfigAssets {
     [AttributeUsage(AttributeTargets.Class)]

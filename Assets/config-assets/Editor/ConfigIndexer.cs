@@ -57,12 +57,13 @@ namespace me.caneva20.ConfigAssets.Editor {
             builder.Append("using me.caneva20.ConfigAssets;\n");
             builder.Append("using System.Collections.Generic;\n");
             builder.Append("using UnityEditor;\n");
+            builder.Append("using SettingsScope = me.caneva20.ConfigAssets.SettingsScope;\n");
             builder.Append("\n");
             builder.Append("public static class ConfigAssetsSettingsProvider {\n");
             builder.Append(
                 "\tprivate static SettingsProvider CreateProvider<T>(string name, SettingsScope scope, IEnumerable<string> keywords) where T : Config<T> {\n");
             builder.Append(
-                "\t\treturn new SettingsProvider($\"Config assets/{name}\", scope, keywords) {\n");
+                "\t\treturn new SettingsProvider($\"Config assets/{name}\", scope.ToUnitySettingsScope(), keywords) {\n");
             builder.Append(
                 "\t\t\tguiHandler = _ => Editor.CreateEditor(Config<T>.Instance).OnInspectorGUI()\n");
             builder.Append("\t\t};\n");

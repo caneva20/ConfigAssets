@@ -1,0 +1,1 @@
+git subtree split --prefix=Assets/config-assets --branch upm

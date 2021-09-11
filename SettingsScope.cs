@@ -27,8 +27,8 @@ namespace me.caneva20.ConfigAssets {
     #if UNITY_EDITOR
         public static UnityEditor.SettingsScope ToUnitySettingsScope(this SettingsScope scope) {
             switch (scope) {
-                case SettingsScope.User: return UnityEditor.SettingsScope.Project;
-                case SettingsScope.Project: return UnityEditor.SettingsScope.User;
+                case SettingsScope.User: return UnityEditor.SettingsScope.User;
+                case SettingsScope.Project: return UnityEditor.SettingsScope.Project;
                 default: throw new ArgumentOutOfRangeException(nameof(scope), scope, null);
             }
         }

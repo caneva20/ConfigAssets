@@ -4,6 +4,7 @@
 //This is intended to be compilable at all time (this include release builds) and will work the exact same as Unity's version
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace me.caneva20.ConfigAssets {
     /// <summary>
@@ -21,14 +22,15 @@ namespace me.caneva20.ConfigAssets {
         Project,
     }
 
+    [SuppressMessage("ReSharper", "ConvertSwitchStatementToSwitchExpression")]
     public static class SettingsScopeExtensions {
     #if UNITY_EDITOR
         public static UnityEditor.SettingsScope ToUnitySettingsScope(this SettingsScope scope) {
-            return scope switch {
-                SettingsScope.Project => UnityEditor.SettingsScope.Project,
-                SettingsScope.User => UnityEditor.SettingsScope.User,
-                _ => throw new ArgumentOutOfRangeException(nameof(scope), scope, null)
-            };
+            switch (scope) {
+                case SettingsScope.User: return UnityEditor.SettingsScope.Project;
+                case SettingsScope.Project: return UnityEditor.SettingsScope.User;
+                default: throw new ArgumentOutOfRangeException(nameof(scope), scope, null);
+            }
         }
     #endif
     }

@@ -42,10 +42,8 @@ namespace me.caneva20.ConfigAssets.Editor {
             DirectorySelector(_codeGenDirectory, "Editor",
                 "This directory is used to store auto-generated files");
 
-            if (!_editorFolder.IsMatch(_codeGenDirectory.stringValue)) {
-                EditorGUILayout.HelpBox(
-                    "This directory MUST contain an 'Editor' folder or be inside one",
-                    MessageType.Error);
+            if (_editorFolder.IsMatch(_codeGenDirectory.stringValue)) {
+                EditorGUILayout.HelpBox("This directory MUST NOT contain an 'Editor' folder", MessageType.Error);
             }
 
             #endregion

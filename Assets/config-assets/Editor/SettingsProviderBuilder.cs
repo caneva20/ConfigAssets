@@ -17,13 +17,13 @@ namespace me.caneva20.ConfigAssets.Editor {
             generator.Initialize();
             var csharpCode = generator.TransformText();
 
-            var dir = $"Assets/{Defaults.Instance.CodeGenDirectory}";
+            var dir = $@"Assets\{Defaults.Instance.CodeGenDirectory}\Editor";
 
             if (!Directory.Exists(dir)) {
                 Directory.CreateDirectory(dir);
             }
 
-            File.WriteAllText($@"{dir}/ConfigAssetsSettingsProvider.g.cs", csharpCode);
+            File.WriteAllText($@"{dir}\ConfigAssetsSettingsProvider.g.cs", csharpCode);
         }
 
         private static IEnumerable<ProviderDefinition> GetProviders(IEnumerable<Type> providerTypes) {

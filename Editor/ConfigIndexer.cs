@@ -11,33 +11,33 @@ namespace me.caneva20.ConfigAssets.Editor {
     public static class ConfigIndexer {
         [DidReloadScripts]
         private static void OnScriptReload() {
-            var configType = typeof(Config);
-
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-               .SelectMany(x => x.GetTypes())
-               .Where(x =>
-                    !x.IsInterface && !x.IsAbstract && x != configType &&
-                    configType.IsAssignableFrom(x)).ToList();
+            var types = FindConfigurations().ToList();
 
             foreach (var type in types) {
                 ConfigLoader.Load(type);
             }
 
-            var guids = AssetDatabase.FindAssets($"t:{typeof(Config)}");
-
-            var configs = guids.Select(guid =>
-                AssetDatabase.LoadAssetAtPath<Config>(AssetDatabase.GUIDToAssetPath(guid)));
-
-            SetPreloadList(configs);
+            UpdatePreloadList();
 
             var providers = GetProviders(types);
             GenerateCodeFile(providers);
         }
 
-        private static void SetPreloadList(IEnumerable<Config> configs) {
-            var preload = PlayerSettings.GetPreloadedAssets()
-               .Where(_ => _ && _ is Config)
-               .ToList();
+        private static IEnumerable<Type> FindConfigurations() {
+            var configType = typeof(Config);
+
+            return AppDomain.CurrentDomain.GetAssemblies()
+               .SelectMany(x => x.GetTypes())
+               .Where(x => !x.IsInterface && !x.IsAbstract && x != configType && configType.IsAssignableFrom(x));
+        }
+
+        private static void UpdatePreloadList() {
+            var guids = AssetDatabase.FindAssets($"t:{typeof(Config)}");
+
+            var configs = guids.Select(guid =>
+                AssetDatabase.LoadAssetAtPath<Config>(AssetDatabase.GUIDToAssetPath(guid)));
+
+            var preload = PlayerSettings.GetPreloadedAssets().Where(x => x && x is Config).ToList();
 
             var except = configs.Except(preload);
 
@@ -52,26 +52,35 @@ namespace me.caneva20.ConfigAssets.Editor {
 
                 if (attribute?.EnableProvider == false) {
                     continue;
-                } 
- 
+                }
+
                 var name = configType?.FullName;
                 var displayName = attribute?.DisplayName ?? configType?.Name;
+
+                var keywords = (attribute?.Keywords ?? Array.Empty<string>()).Select(x => $"\"{x}\"").ToList();
 
                 yield return new ProviderDefinition {
                     Name = name?.Replace(".", ""),
                     NamespacedName = configType?.FullName,
                     DisplayName = displayName,
-                    Scope = attribute?.Scope ?? SettingsScope.Project,
-                    Keywords = attribute?.Keywords ?? Array.Empty<string>(),
+                    Scope = (attribute?.Scope ?? SettingsScope.Project).ToString(),
+                    Keywords = keywords.Count == 0 ? "null" : $"new string[] {{{string.Join(", ", keywords)}}}",
                 };
             }
         }
 
         private static void GenerateCodeFile(IEnumerable<ProviderDefinition> providers) {
-            var csharpCode = new SettingsProviderGenerator(providers).TransformText();
+            var generator = new SettingsProviderGenerator {
+                Session = new Dictionary<string, object> {
+                    { "_providers", providers.ToArray() }
+                }
+            };
 
-            var dir = $"Assets/{Defaults.Instance.CodeGenDirectory}";
+            generator.Initialize();
+            var csharpCode = generator.TransformText();
             
+            var dir = $"Assets/{Defaults.Instance.CodeGenDirectory}";
+
             if (!Directory.Exists(dir)) {
                 Directory.CreateDirectory(dir);
             }

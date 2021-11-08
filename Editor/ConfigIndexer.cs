@@ -47,22 +47,20 @@ namespace me.caneva20.ConfigAssets.Editor {
         private static IEnumerable<ConfigurationDefinition> FindConfigurations() {
             var systemTypes = AppDomain.CurrentDomain.GetAssemblies()
                .SelectMany(x => x.GetTypes())
-               .Where(x => !x.IsInterface && !x.IsAbstract && x != _configType);
+               .Where(x => !x.IsInterface && !x.IsAbstract);
 
             return systemTypes.Select(GetDefinition).Where(x => x != null);
         }
 
         private static ConfigurationDefinition GetDefinition(Type type) {
-            var usesInheritance = _configType.IsAssignableFrom(type);
             var configAttribute = type.GetCustomAttribute<ConfigAttribute>();
 
-            if (!usesInheritance && configAttribute == null) {
+            if (configAttribute == null) {
                 return null;
             }
-            
+
             return new ConfigurationDefinition {
                 Type = type,
-                UsesInheritance = usesInheritance,
                 Attribute = configAttribute,
             };
         }

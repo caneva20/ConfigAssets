@@ -1,8 +1,11 @@
+using me.caneva20.ConfigAssets.Loading;
 using UnityEngine;
 
 namespace me.caneva20.ConfigAssets {
     [Config(DisplayName = "ConfigAssets settings")]
-    public class Defaults : Config<Defaults> {
+    public class Defaults : ScriptableObject {
+        internal static Defaults Instance => ConfigLoader.LoadDefaults();
+
         [SerializeField] private string _baseDirectory = "Configurations\\Resources";
         [SerializeField] private string _codeGenDirectory = "Configurations\\generated";
         [SerializeField] private bool _appendNamespaceToFile = true;

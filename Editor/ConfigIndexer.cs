@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using me.caneva20.ConfigAssets.Loading;
@@ -9,10 +10,28 @@ using UnityEngine;
 
 namespace me.caneva20.ConfigAssets.Editor {
     public static class ConfigIndexer {
-        private static readonly Type _configType = typeof(Config);
+        private static string GenMarkerFile => $"{Path.GetTempPath()}/config-assets.gen-marker";
+
+        private static bool IsGenerating {
+            get => File.Exists(GenMarkerFile);
+            set {
+                if (value) {
+                    File.Create(GenMarkerFile);
+                } else {
+                    File.Delete(GenMarkerFile);
+                }
+            }
+        }
 
         [DidReloadScripts]
         private static void OnScriptReload() {
+            if (IsGenerating) {
+                IsGenerating = false;
+                return;
+            }
+
+            IsGenerating = true;
+
             var definitions = FindConfigurations().ToList();
 
             foreach (var definition in definitions) {

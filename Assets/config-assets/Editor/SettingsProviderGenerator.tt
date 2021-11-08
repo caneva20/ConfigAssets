@@ -7,14 +7,16 @@
 // It will be overwritten next time the generator is run.
 ////////////////////////////////////////////////////////////////////////////////
 using me.caneva20.ConfigAssets;
+using me.caneva20.ConfigAssets.Loading;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 using SettingsScope = UnityEditor.SettingsScope;
 
 public static class ConfigAssetsSettingsProvider {
-    private static SettingsProvider CreateProvider<T>(string name, SettingsScope scope, IEnumerable<string> keywords) where T : Config<T> {
+    private static SettingsProvider CreateProvider<T>(string name, SettingsScope scope, IEnumerable<string> keywords) where T : ScriptableObject {
         return new SettingsProvider($"Config assets/{name}", scope, keywords) {
-            guiHandler = _ => Editor.CreateEditor(Config<T>.Instance).OnInspectorGUI()
+            guiHandler = _ => Editor.CreateEditor(ConfigLoader.Load<T>()).OnInspectorGUI()
         };
     }
 

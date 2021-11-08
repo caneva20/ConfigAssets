@@ -9,7 +9,7 @@ namespace me.caneva20.ConfigAssets {
         public SettingsScope Scope { get; set; } = SettingsScope.Project;
         public string[] Keywords { get; set; } = { };
 
-        public static ConfigAttribute Find<T>() where T : Config {
+        public static ConfigAttribute Find<T>() {
             return Find(typeof(T));
         }
 

@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 
 namespace me.caneva20.ConfigAssets.Editor {
-    public static class SettingsProviderBuilder {
-        public static void Build(IEnumerable<Type> configurationTypes) {
-            var providers = GetProviders(configurationTypes);
+    internal static class SettingsProviderBuilder {
+        internal static void Build(IEnumerable<ConfigurationDefinition> definitions) {
+            var providers = GetProviders(definitions);
 
             var generator = new SettingsProviderGenerator {
                 Session = new Dictionary<string, object> {
@@ -26,24 +26,22 @@ namespace me.caneva20.ConfigAssets.Editor {
             File.WriteAllText($@"{dir}\ConfigAssetsSettingsProvider.g.cs", csharpCode);
         }
 
-        private static IEnumerable<ProviderDefinition> GetProviders(IEnumerable<Type> providerTypes) {
-            foreach (var configType in providerTypes) {
-                var attribute = ConfigAttribute.Find(configType);
-
-                if (attribute?.EnableProvider == false) {
+        private static IEnumerable<ProviderDefinition> GetProviders(IEnumerable<ConfigurationDefinition> definitions) {
+            foreach (var definition in definitions) {
+                if (definition.Attribute?.EnableProvider == false) {
                     continue;
                 }
 
-                var name = configType?.FullName;
-                var displayName = attribute?.DisplayName ?? configType?.Name;
+                var name = definition.Type?.FullName;
+                var displayName = definition.Attribute?.DisplayName ?? definition.Type?.Name;
 
-                var keywords = (attribute?.Keywords ?? Array.Empty<string>()).Select(x => $"\"{x}\"").ToList();
+                var keywords = (definition.Attribute?.Keywords ?? Array.Empty<string>()).Select(x => $"\"{x}\"").ToList();
 
                 yield return new ProviderDefinition {
                     Name = name?.Replace(".", ""),
-                    NamespacedName = configType?.FullName,
+                    NamespacedName = definition.Type?.FullName,
                     DisplayName = displayName,
-                    Scope = (attribute?.Scope ?? SettingsScope.Project).ToString(),
+                    Scope = (definition.Attribute?.Scope ?? SettingsScope.Project).ToString(),
                     Keywords = keywords.Count == 0 ? "null" : $"new string[] {{{string.Join(", ", keywords)}}}",
                 };
             }

@@ -13,15 +13,15 @@ namespace me.caneva20.ConfigAssets.Editor {
 
         [DidReloadScripts]
         private static void OnScriptReload() {
-            var types = FindConfigurations().ToList();
+            var definitions = FindConfigurations().ToList();
 
-            foreach (var definition in types) {
+            foreach (var definition in definitions) {
                 ConfigLoader.Load(definition.Type);
             }
 
-            UpdatePreloadList();
-            SettingsProviderBuilder.Build(types);
-            
+            UpdatePreloadList(definitions);
+            SettingsProviderBuilder.Build(definitions);
+
             RefreshAssetDatabase();
         }
 
@@ -47,20 +47,47 @@ namespace me.caneva20.ConfigAssets.Editor {
                 Attribute = configAttribute,
             };
         }
-        
-        private static void UpdatePreloadList() {
-            var guids = AssetDatabase.FindAssets($"t:{typeof(Config)}");
 
-            var configs = guids.Select(guid =>
-                AssetDatabase.LoadAssetAtPath<Config>(AssetDatabase.GUIDToAssetPath(guid)));
+        private static void UpdatePreloadList(IEnumerable<ConfigurationDefinition> definitions) {
+            foreach (var definition in definitions) {
+                var guids = AssetDatabase.FindAssets($"t:{definition.Type}").ToList();
 
-            var preload = PlayerSettings.GetPreloadedAssets().Where(x => x && x is Config).ToList();
+                if (guids.Count == 0) {
+                    Debug.Log($"No assets of type {definition.Type.FullName} was found");
+                } else if (guids.Count > 1) {
+                    Debug.LogError($"Multiple assets of type {definition.Type.FullName} was found. Please delete all but 1. (Bellow is a list of all of them)");
 
-            var except = configs.Except(preload);
+                    foreach (var g in guids) {
+                        var path = AssetDatabase.GUIDToAssetPath(g);
+                        var invalidAsset = AssetDatabase.LoadAssetAtPath(path, definition.Type);
 
-            preload.AddRange(except);
+                        Debug.LogError($"This asset may be invalid for {definition.Type.FullName}. <Click this message to highlight it>", invalidAsset);
+                    }
+                }
+                
+                if (guids.Count != 1) {
+                    continue;
+                }
 
-            PlayerSettings.SetPreloadedAssets(preload.ToArray());
+                var guid = guids.First();
+                var asset = AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(guid), definition.Type);
+                
+                if (asset == null) {
+                    Debug.LogError($"No asset found with guid {guid}");
+                    continue;
+                }
+                
+                var preloadedAssets = PlayerSettings.GetPreloadedAssets().ToList();
+                var isPreloaded = preloadedAssets.Contains(asset);
+
+                if (isPreloaded) {
+                    continue;
+                }
+
+                preloadedAssets.Add(asset);
+
+                PlayerSettings.SetPreloadedAssets(preloadedAssets.ToArray());
+            }
         }
 
         private static void RefreshAssetDatabase() {

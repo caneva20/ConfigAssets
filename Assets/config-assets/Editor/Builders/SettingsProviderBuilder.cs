@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace me.caneva20.ConfigAssets.Editor {
+namespace me.caneva20.ConfigAssets.Editor.Builders {
     internal static class SettingsProviderBuilder {
         internal static void Build(IEnumerable<ConfigurationDefinition> definitions) {
             var providers = GetProviders(definitions);

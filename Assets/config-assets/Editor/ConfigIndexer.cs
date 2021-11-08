@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using me.caneva20.ConfigAssets.Editor.Builders;
 using me.caneva20.ConfigAssets.Loading;
 using UnityEditor;
 using UnityEditor.Callbacks;

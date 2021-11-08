@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace me.caneva20.ConfigAssets.Editor {
+namespace me.caneva20.ConfigAssets.Editor.Builders {
     internal static class EnhancedConfigurationBuilder {
         internal static void Build(ConfigurationDefinition definition) {
             var canEnhance = CanEnhance(definition.Type);

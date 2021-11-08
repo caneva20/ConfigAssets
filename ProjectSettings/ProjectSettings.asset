@@ -136,6 +136,7 @@ PlayerSettings:
     Others: 1
   bundleVersion: 0.1
   preloadedAssets:
+  - {fileID: 11400000, guid: 8cbd69e3a441d2e4b918f80f17abc143, type: 2}
   - {fileID: 11400000, guid: ab7df96054ce8d649833f70bfc0f277d, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -154,7 +155,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Standalone: com.Company.ProductName
+    Standalone: com.DefaultCompany.me.caneva20.config-assets
   buildNumber:
     Standalone: 0
     iPhone: 0

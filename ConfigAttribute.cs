@@ -9,6 +9,8 @@ namespace me.caneva20.ConfigAssets {
         public SettingsScope Scope { get; set; } = SettingsScope.Project;
         public string[] Keywords { get; set; } = { };
 
+        public bool GenerateSingleton { get; set; }
+
         public static ConfigAttribute Find(Type type) {
             return (ConfigAttribute) GetCustomAttribute(type, typeof(ConfigAttribute));
         }

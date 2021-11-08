@@ -34,6 +34,9 @@ namespace me.caneva20.ConfigAssets.Editor {
 
             var definitions = FindConfigurations().ToList();
 
+            ConfigLoader.LoadDefaults();
+            EnhanceConfigurations(definitions);
+
             foreach (var definition in definitions) {
                 ConfigLoader.Load(definition.Type);
             }
@@ -104,6 +107,12 @@ namespace me.caneva20.ConfigAssets.Editor {
                 preloadedAssets.Add(asset);
 
                 PlayerSettings.SetPreloadedAssets(preloadedAssets.ToArray());
+            }
+        }
+
+        private static void EnhanceConfigurations(IEnumerable<ConfigurationDefinition> configurationTypes) {
+            foreach (var configurationType in configurationTypes) {
+                EnhancedConfigurationBuilder.Build(configurationType);
             }
         }
 

@@ -9,6 +9,7 @@ using UnityEditor;
 #endif
 
 [assembly: InternalsVisibleTo("ConfigAssets.Editor")]
+
 namespace me.caneva20.ConfigAssets.Loading {
     public static class ConfigLoader {
         private static Defaults _defaults;
@@ -33,9 +34,8 @@ namespace me.caneva20.ConfigAssets.Loading {
             return Load(type, MakeSaveDirectoryPath(), MakeAssetName(type));
         }
 
-        private static T Load<T>(string dirPath, string assetName)
-            where T : ScriptableObject {
-            return (T) Load(typeof(T), dirPath, assetName);
+        private static T Load<T>(string dirPath, string assetName) where T : ScriptableObject {
+            return (T)Load(typeof(T), dirPath, assetName);
         }
 
         private static object Load(Type type, string dirPath, string assetName) {
@@ -45,10 +45,9 @@ namespace me.caneva20.ConfigAssets.Loading {
             }
         #endif
 
-            var config = Resources.FindObjectsOfTypeAll(type)
-               .FirstOrDefault();
+            var config = Resources.FindObjectsOfTypeAll(type).FirstOrDefault();
 
-            return (config ? config : CreateConfigAsset(type, dirPath, assetName));
+            return config ? config : CreateConfigAsset(type, dirPath, assetName);
         }
 
         private static string MakeSaveDirectoryPath() {

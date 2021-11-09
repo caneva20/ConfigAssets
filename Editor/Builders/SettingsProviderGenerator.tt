@@ -16,7 +16,7 @@ using SettingsScope = UnityEditor.SettingsScope;
 public static class ConfigAssetsSettingsProvider {
     private static SettingsProvider CreateProvider<T>(string name, SettingsScope scope, IEnumerable<string> keywords) where T : ScriptableObject {
         return new SettingsProvider($"Config assets/{name}", scope, keywords) {
-            guiHandler = _ => Editor.CreateEditor(ConfigLoader.Load<T>()).OnInspectorGUI()
+            guiHandler = _ => Editor.CreateEditor((T)ConfigLoader.Load(typeof(T))).OnInspectorGUI()
         };
     }
 

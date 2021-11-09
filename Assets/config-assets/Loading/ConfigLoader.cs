@@ -16,26 +16,16 @@ namespace me.caneva20.ConfigAssets.Loading {
 
         internal static Defaults LoadDefaults() {
             if (_defaults == null) {
-                _defaults = Load<Defaults>(@"Configurations\Resources\", "Defaults.asset");
+                _defaults = (Defaults)Load(typeof(Defaults), @"Configurations\Resources\", "Defaults.asset");
             }
 
             return _defaults;
-        }
-
-        public static T Load<T>() where T : ScriptableObject {
-            LoadDefaults();
-
-            return Load<T>(MakeSaveDirectoryPath(), MakeAssetName(typeof(T)));
         }
 
         public static object Load(Type type) {
             LoadDefaults();
 
             return Load(type, MakeSaveDirectoryPath(), MakeAssetName(type));
-        }
-
-        private static T Load<T>(string dirPath, string assetName) where T : ScriptableObject {
-            return (T)Load(typeof(T), dirPath, assetName);
         }
 
         private static object Load(Type type, string dirPath, string assetName) {

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using me.caneva20.ConfigAssets.Editor.Builders;
 using me.caneva20.ConfigAssets.Loading;
 using UnityEditor;
@@ -33,12 +32,16 @@ namespace me.caneva20.ConfigAssets.Editor {
 
             IsGenerating = true;
 
-            var definitions = FindConfigurations().ToList();
+            var definitions = ConfigurationFinder.FindConfigurations();
 
             ConfigLoader.LoadDefaults();
             EnhanceConfigurations(definitions);
 
             foreach (var definition in definitions) {
+                if (!definition.IsValid) {
+                    continue;
+                } 
+
                 ConfigLoader.Load(definition.Type);
             }
 
@@ -48,29 +51,12 @@ namespace me.caneva20.ConfigAssets.Editor {
             RefreshAssetDatabase();
         }
 
-        private static IEnumerable<ConfigurationDefinition> FindConfigurations() {
-            var systemTypes = AppDomain.CurrentDomain.GetAssemblies()
-               .SelectMany(x => x.GetTypes())
-               .Where(x => !x.IsInterface && !x.IsAbstract);
-
-            return systemTypes.Select(GetDefinition).Where(x => x != null);
-        }
-
-        private static ConfigurationDefinition GetDefinition(Type type) {
-            var configAttribute = type.GetCustomAttribute<ConfigAttribute>();
-
-            if (configAttribute == null) {
-                return null;
-            }
-
-            return new ConfigurationDefinition {
-                Type = type,
-                Attribute = configAttribute,
-            };
-        }
-
         private static void UpdatePreloadList(IEnumerable<ConfigurationDefinition> definitions) {
             foreach (var definition in definitions) {
+                if (!definition.IsValid) {
+                    continue;
+                }
+                
                 var guids = AssetDatabase.FindAssets($"t:{definition.Type}").ToList();
 
                 if (guids.Count == 0) {
@@ -120,7 +106,7 @@ namespace me.caneva20.ConfigAssets.Editor {
         private static void RefreshAssetDatabase() {
             try {
                 AssetDatabase.Refresh();
-            } catch (Exception e) {
+            } catch (Exception) {
                 Debug.LogWarning("[ConfigAssets] Failed to refresh asset database");
             }
         }

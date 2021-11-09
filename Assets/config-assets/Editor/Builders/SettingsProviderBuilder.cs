@@ -28,7 +28,7 @@ namespace me.caneva20.ConfigAssets.Editor.Builders {
 
         private static IEnumerable<ProviderDefinition> GetProviders(IEnumerable<ConfigurationDefinition> definitions) {
             foreach (var definition in definitions) {
-                if (definition.Attribute?.EnableProvider == false) {
+                if (!definition.IsValid || definition.Attribute?.EnableProvider == false) {
                     continue;
                 }
 

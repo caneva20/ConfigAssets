@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using me.caneva20.ConfigAssets.Editor.Builders;
@@ -12,46 +11,64 @@ namespace me.caneva20.ConfigAssets.Editor {
     public static class ConfigIndexer {
         private static string GenMarkerFile => $"{Path.GetTempPath()}/config-assets.gen-marker";
 
-        private static bool IsGenerating {
-            get => File.Exists(GenMarkerFile);
-            set {
-                if (value) {
+        private static GenerationStep GenerationStep {
+            get {
+                if (!File.Exists(GenMarkerFile)) {
                     File.Create(GenMarkerFile);
-                } else {
-                    File.Delete(GenMarkerFile);
                 }
+                
+                var fileText = File.ReadAllText(GenMarkerFile);
+                return Enum.TryParse<GenerationStep>(fileText, out var step)
+                    ? step
+                    : GenerationStep.Finished;
             }
+            set => File.WriteAllText(GenMarkerFile, value.ToString());
         }
+
+        private static ConfigurationDefinition[] Definitions => ConfigurationFinder.FindConfigurations();
 
         [DidReloadScripts]
         private static void OnScriptReload() {
-            if (IsGenerating) {
-                IsGenerating = false;
-                return;
+            switch (GenerationStep) {
+                case GenerationStep.Enhancement:
+                    DoEnhancement();
+                    break;
+                case GenerationStep.PostEnhancement:
+                    DoPostEnhancement();
+                    break;
+                case GenerationStep.Finished:
+                    GenerationStep = GenerationStep.Enhancement;
+                    break;
             }
-
-            IsGenerating = true;
-
-            var definitions = ConfigurationFinder.FindConfigurations();
-
-            ConfigLoader.LoadDefaults();
-            EnhanceConfigurations(definitions);
-
-            foreach (var definition in definitions) {
-                if (!definition.IsValid) {
-                    continue;
-                } 
-
-                ConfigLoader.Load(definition.Type);
-            }
-
-            UpdatePreloadList(definitions);
-            SettingsProviderBuilder.Build(definitions);
 
             RefreshAssetDatabase();
         }
 
-        private static void UpdatePreloadList(IEnumerable<ConfigurationDefinition> definitions) {
+        private static void DoEnhancement() {
+            EnhanceConfigurations(Definitions);
+            SettingsProviderBuilder.Build(Definitions);
+
+            GenerationStep = GenerationStep.PostEnhancement;
+        }
+
+        private static void DoPostEnhancement() {
+            UpdatePreloadList();
+
+            GenerationStep = GenerationStep.Finished;
+        }
+
+
+        private static void UpdatePreloadList() {
+            var definitions = Definitions;
+            
+            foreach (var definition in definitions) {
+                if (!definition.IsValid) {
+                    continue;
+                }
+
+                ConfigLoader.Load(definition.Type);
+            }
+
             foreach (var definition in definitions) {
                 if (!definition.IsValid) {
                     continue;
@@ -97,10 +114,12 @@ namespace me.caneva20.ConfigAssets.Editor {
             }
         }
 
-        private static void EnhanceConfigurations(IEnumerable<ConfigurationDefinition> configurationTypes) {
+        private static void EnhanceConfigurations(ConfigurationDefinition[] configurationTypes) {
             foreach (var configurationType in configurationTypes) {
                 EnhancedConfigurationBuilder.Build(configurationType);
             }
+
+            RefreshAssetDatabase();
         }
 
         private static void RefreshAssetDatabase() {

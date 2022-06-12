@@ -16,7 +16,7 @@ namespace me.caneva20.ConfigAssets.Loading {
                 return;
             }
 
-            _defaults = Load<Defaults>(@"Configurations\Resources\", "Defaults.asset");
+            _defaults = Load<Defaults>(Path.Join("Configurations", "Resources"), "Defaults.asset");
         }
 
         public static T Load<T>() where T : ScriptableObject {
@@ -54,7 +54,7 @@ namespace me.caneva20.ConfigAssets.Loading {
                 return _defaults.BaseDirectory;
             }
 
-            return $@"{_defaults.BaseDirectory}\";
+            return $@"{_defaults.BaseDirectory}{Path.DirectorySeparatorChar}";
         }
 
         private static string MakeAssetName(Type type) {
@@ -90,7 +90,7 @@ namespace me.caneva20.ConfigAssets.Loading {
                 Directory.CreateDirectory(absolutePath);
             }
 
-            var path = $"Assets/{dirPath}{assetName}";
+            var path = Path.Join("Assets", dirPath, assetName);
 
             AssetDatabase.CreateAsset(config, path);
             AssetDatabase.SaveAssets();

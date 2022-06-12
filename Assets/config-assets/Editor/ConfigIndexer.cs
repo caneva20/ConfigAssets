@@ -97,9 +97,14 @@ namespace me.caneva20.ConfigAssets.Editor {
 
             builder.Append("}\n");
 
-            File.WriteAllText(
-                $@"Assets/{Defaults.Instance.CodeGenDirectory}/ConfigAssetsSettingsProvider.cs",
-                builder.ToString());
+            var dirPath = Path.Combine("Assets", Defaults.Instance.CodeGenDirectory);
+            var filePath = Path.Combine(dirPath, "ConfigAssetsSettingsProvider.cs");
+            
+            if (!Directory.Exists(dirPath)) {
+                Directory.CreateDirectory(dirPath);
+            }
+            
+            File.WriteAllText(filePath, builder.ToString());
 
             AssetDatabase.Refresh();
         }

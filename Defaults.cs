@@ -8,7 +8,7 @@ namespace me.caneva20.ConfigAssets {
         internal static Defaults Instance => ConfigLoader.LoadDefaults();
 
         [SerializeField] private string _baseDirectory = Path.Join("Configurations", "Resources");
-        [SerializeField] private string _codeGenDirectory = Path.Join("Configurations", "Editor");
+        [SerializeField] private string _codeGenDirectory = Path.Join("Configurations", "generated");
         [SerializeField] private bool _appendNamespaceToFile = true;
         [SerializeField] private int _nameSpaceLength = 2;
 

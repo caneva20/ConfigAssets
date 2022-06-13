@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Linq;
 using me.caneva20.ConfigAssets.Editor.Builders;
 using me.caneva20.ConfigAssets.Loading;
@@ -9,20 +8,11 @@ using UnityEngine;
 
 namespace me.caneva20.ConfigAssets.Editor {
     public static class ConfigIndexer {
-        private static string GenMarkerFile => $"{Path.GetTempPath()}{Path.DirectorySeparatorChar}config-assets.gen-marker";
+        private const string GENERATION_STEP_KEY = "me.caneva20.config-assets.generation-step";
 
         private static GenerationStep GenerationStep {
-            get {
-                if (!File.Exists(GenMarkerFile)) {
-                    File.Create(GenMarkerFile);
-                }
-                
-                var fileText = File.ReadAllText(GenMarkerFile);
-                return Enum.TryParse<GenerationStep>(fileText, out var step)
-                    ? step
-                    : GenerationStep.Finished;
-            }
-            set => File.WriteAllText(GenMarkerFile, value.ToString());
+            get => (GenerationStep)EditorPrefs.GetInt(GENERATION_STEP_KEY, (int)GenerationStep.Enhancement);
+            set => EditorPrefs.SetInt(GENERATION_STEP_KEY, (int)value);
         }
 
         private static ConfigurationDefinition[] Definitions => ConfigurationFinder.FindConfigurations();

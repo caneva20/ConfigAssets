@@ -10,17 +10,21 @@ The package is available on the [openupm registry](https://openupm.com). It's re
 openupm add me.caneva20.config-assets
 ```
 
-## Usage
-First create a class and extend from `Config<T>`, where `T` is the class itself.
+# Usage
+First create a `partial class` and add the `Config` attribute to it
 
 ```C#
-public class MyConfig : Config<MyConfig> {}
+[Config]
+public partial class MyConfig {
+    // Your fields & attributes
+}
 ```
 
 Then add as many fields as you need, note that it must be Serializable by Unity for it to save. Anything that is valid for a [`ScriptableObject`](https://docs.unity3d.com/Manual/class-ScriptableObject.html) is valid here as well.
 
 ```C#
-public class MyConfig : Config<MyConfig> {
+[Config]
+public partial class MyConfig {
     [SerializeField] private string _myString;
     [SerializeField] private bool _myBool = true;
 
@@ -29,23 +33,26 @@ public class MyConfig : Config<MyConfig> {
 }
 ```
 
-Your class is now accessible through a [Singleton](https://en.wikipedia.org/wiki/Singleton_pattern).
-To use it just call `YOUR_CLASS_NAME.Instance.YOUR_FIELD`
+Your class is now accessible through a direct static access.
+<br>To use it just call `YOUR_CLASS_NAME.YOUR_FIELD`
 
 ``` C#
-int valueFromConfig = MyConfig.Instance.myInt;
+int valueFromConfig = MyConfig.myInt;
 ```
+<br>
 
-#
+* Whenever you get back to Unity, a new `.asset` file will be created for your configuration and it will be added to `Preloaded assets` under the player settings.
+* You can access your configuration through Unity's `Project Settings` under `Edit>Project Settings...` in the toolbar,
+and then selecting the desired configuration under the `Config assets` section.
 
-Whenever you get back to unity a new `.asset` file will be created for your configuration and it will be added to `Preloaded assets` under the player settings.
-To access and configure/change your configuration file there's two options:
-1. Find your `.asset` file, usually under `Configurations>Resources`
-2. Through Unity's `Project Settings` under `Edit>Project Settings...` in the toolbar, and then selecting the desired configuration under the `Config assets` section
+# Customization
+The `[Config]` attribute has some properties to allow you to customize you configuration a bit:
 
-## Customization
-You may add a `[Config]` attribute to your config class in order to customize some of its properties:
-```C#
-[Config(Scope = SettingsScope.User)]
-public class MyConfig : Config<MyConfig> { }
-```
+| Attribute           | Description                                                                                                                                                               | Default                                 |
+|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------|
+| `FileName`          | The name of the generated file                                                                                                                                            | `null` (Will use the namespace instead) |
+| `DisplayName`       | The name used under `Project Settings`                                                                                                                                    | `null` (Will use the type name instead) |
+| `EnableProvider`    | Whether or not to generate a [`SettingsProvider`](https://docs.unity3d.com/ScriptReference/SettingsProvider.html)                                                         | `true`                                  |
+| `Scope`             | The [scope](https://docs.unity3d.com/ScriptReference/SettingsScope.html) used by the [`SettingsProvider`](https://docs.unity3d.com/ScriptReference/SettingsProvider.html) | `SettingsScope.Project`                 |
+| `Keywords`          | The keywords used by the [`SettingsProvider`](https://docs.unity3d.com/ScriptReference/SettingsProvider.html)                                                             | none/empty                              |
+| `GenerateSingleton` | Whether or not to generate the `.Instance` property                                                                                                                       | `true`                                  |

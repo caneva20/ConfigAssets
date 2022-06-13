@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace me.caneva20.ConfigAssets.Editor {
     public static class ConfigIndexer {
-        private static string GenMarkerFile => $"{Path.GetTempPath()}/config-assets.gen-marker";
+        private static string GenMarkerFile => $"{Path.GetTempPath()}{Path.DirectorySeparatorChar}config-assets.gen-marker";
 
         private static GenerationStep GenerationStep {
             get {

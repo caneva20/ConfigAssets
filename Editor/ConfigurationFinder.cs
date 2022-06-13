@@ -33,7 +33,7 @@ namespace me.caneva20.ConfigAssets.Editor {
         }
 
         private static string FindCSharpFile(Type type) {
-            var csFiles = Directory.GetFiles(@"Assets\", "*.cs", SearchOption.AllDirectories)
+            var csFiles = Directory.GetFiles(@"Assets" + Path.DirectorySeparatorChar, "*.cs", SearchOption.AllDirectories)
                .Where(x => !x.EndsWith(".g.cs"))
                .Select(File.ReadAllText);
 

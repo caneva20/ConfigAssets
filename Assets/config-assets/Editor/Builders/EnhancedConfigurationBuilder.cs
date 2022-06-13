@@ -14,13 +14,14 @@ namespace me.caneva20.ConfigAssets.Editor.Builders {
 
             var enhancedClass = GenerateEnhancedClass(definition);
 
-            var dir = $@"Assets\{Defaults.Instance.CodeGenDirectory}";
+            var dir = Path.Join("Assets", Defaults.Instance.CodeGenDirectory);
             
             if (!Directory.Exists(dir)) {
                 Directory.CreateDirectory(dir);
             }
-            
-            File.WriteAllText($@"{dir}\{definition.Type.Name}.g.cs", enhancedClass);
+
+            var filePath = Path.Join(dir, $"{definition.Type.Name}.g.cs");
+            File.WriteAllText(filePath, enhancedClass);
         }
 
         private static PropertyDefinition[] GetProperties(Type type) {

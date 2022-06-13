@@ -1,39 +1,31 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 
 #endif
 
+[assembly: InternalsVisibleTo("ConfigAssets.Editor")]
+
 namespace me.caneva20.ConfigAssets.Loading {
     public static class ConfigLoader {
         private static Defaults _defaults;
 
-        private static void LoadDefaults() {
-            if (_defaults != null) {
-                return;
+        internal static Defaults LoadDefaults() {
+            if (_defaults == null) {
+                _defaults = (Defaults)Load(typeof(Defaults), Path.Join("Configurations", "Resources"), "Defaults.asset");
             }
 
-            _defaults = Load<Defaults>(Path.Join("Configurations", "Resources"), "Defaults.asset");
-        }
-
-        public static T Load<T>() where T : ScriptableObject {
-            LoadDefaults();
-
-            return Load<T>(MakeSaveDirectoryPath(), MakeAssetName(typeof(T)));
+            return _defaults;
         }
 
         public static object Load(Type type) {
             LoadDefaults();
 
             return Load(type, MakeSaveDirectoryPath(), MakeAssetName(type));
-        }
-
-        private static T Load<T>(string dirPath, string assetName)
-            where T : ScriptableObject {
-            return (T) Load(typeof(T), dirPath, assetName);
         }
 
         private static object Load(Type type, string dirPath, string assetName) {
@@ -43,10 +35,9 @@ namespace me.caneva20.ConfigAssets.Loading {
             }
         #endif
 
-            var config = Resources.FindObjectsOfTypeAll(type)
-               .FirstOrDefault();
+            var config = Resources.FindObjectsOfTypeAll(type).FirstOrDefault();
 
-            return (config ? config : CreateConfigAsset(type, dirPath, assetName));
+            return config ? config : CreateConfigAsset(type, dirPath, assetName);
         }
 
         private static string MakeSaveDirectoryPath() {
@@ -54,7 +45,7 @@ namespace me.caneva20.ConfigAssets.Loading {
                 return _defaults.BaseDirectory;
             }
 
-            return $@"{_defaults.BaseDirectory}{Path.DirectorySeparatorChar}";
+            return _defaults.BaseDirectory + Path.DirectorySeparatorChar;
         }
 
         private static string MakeAssetName(Type type) {

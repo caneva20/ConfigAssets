@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using me.caneva20.ConfigAssets.Exceptions;
 using UnityEngine;
 
 namespace me.caneva20.ConfigAssets.Editor {
@@ -35,9 +36,21 @@ namespace me.caneva20.ConfigAssets.Editor {
         private static string FindCSharpFile(Type type) {
             var csFiles = Directory.GetFiles(@"Assets" + Path.DirectorySeparatorChar, "*.cs", SearchOption.AllDirectories)
                .Where(x => !x.EndsWith(".g.cs"))
-               .Select(File.ReadAllText);
+               .Select(x => new {
+                    FileName = x,
+                    Content = File.ReadAllText(x)
+                });
 
-            return csFiles.FirstOrDefault(x => IsSourceFile(type, x));
+            return csFiles.FirstOrDefault(x => {
+                    try {
+                        return IsSourceFile(type, x.Content);
+                    } catch (InvalidNamespaceException e) {
+                        Debug.LogWarning(
+                            $"While looking for a config for {type.FullName}, the file {x.FileName} seemed like a potential config file, but is missing a valid namespace\n{e.Message}");
+                        return false;
+                    }
+                })
+              ?.Content;
         }
 
         private static bool IsSourceFile(Type type, string fileText) {
@@ -50,13 +63,11 @@ namespace me.caneva20.ConfigAssets.Editor {
 
         private static bool HasNamespaceMatch(Type type, string fileText) {
             if (type.Namespace == null) {
-                Debug.LogWarning($"Type {type.FullName} must contain a namespace");
-                return false;
+                throw new InvalidNamespaceException($"Type {type.FullName} must contain a namespace", type);
             }
 
             if (new Regex("namespace").Matches(fileText).Count != 1) {
-                Debug.LogWarning("Target file contains none or multiple namespaces");
-                return false;
+                throw new InvalidNamespaceException("Target file contains none or multiple namespaces", type);
             }
 
             return HasMatch(fileText, $"namespace( |\n)+{type.Namespace}");

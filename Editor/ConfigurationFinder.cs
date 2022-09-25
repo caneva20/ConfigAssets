@@ -28,7 +28,7 @@ namespace me.caneva20.ConfigAssets.Editor {
             return new ConfigurationDefinition {
                 Type = type,
                 Attribute = configAttribute,
-                HasNamespace = HasNamespaceMatch(type, cSharpFile),
+                HasNamespace = !string.IsNullOrWhiteSpace(cSharpFile) && HasNamespaceMatch(type, cSharpFile),
                 IsPartial = IsPartialClass(type, cSharpFile)
             };
         }

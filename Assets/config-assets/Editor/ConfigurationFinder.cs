@@ -29,7 +29,7 @@ namespace me.caneva20.ConfigAssets.Editor {
                 Type = type,
                 Attribute = configAttribute,
                 HasNamespace = !string.IsNullOrWhiteSpace(cSharpFile) && HasNamespaceMatch(type, cSharpFile),
-                IsPartial = IsPartialClass(type, cSharpFile)
+                IsPartial = !string.IsNullOrWhiteSpace(cSharpFile) && IsPartialClass(type, cSharpFile)
             };
         }
 

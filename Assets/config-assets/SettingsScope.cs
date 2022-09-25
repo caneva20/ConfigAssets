@@ -1,6 +1,6 @@
 //DISCLAIMER
 //THIS IS A COPY OF UnityEditor.SettingsScope
-//It is only provided here as a way to avoid compilation errors due to using ´UnityEditor` namespace
+//It is only provided here as a way to avoid compilation errors from using ´UnityEditor`
 //This is intended to be compilable at all time (this include release builds) and will work the exact same as Unity's version
 
 namespace me.caneva20.ConfigAssets {

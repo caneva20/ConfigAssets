@@ -13,34 +13,39 @@ namespace me.caneva20.ConfigAssets.Editor {
         private SerializedProperty _codeGenDirectory;
         private SerializedProperty _appendNamespaceToFile;
         private SerializedProperty _nameSpaceLength;
+        private SerializedProperty _loggingLevel;
 
         private void OnEnable() {
             _baseDirectory = serializedObject.FindProperty("_baseDirectory");
             _codeGenDirectory = serializedObject.FindProperty("_codeGenDirectory");
             _appendNamespaceToFile = serializedObject.FindProperty("_appendNamespaceToFile");
             _nameSpaceLength = serializedObject.FindProperty("_nameSpaceLength");
+            _loggingLevel = serializedObject.FindProperty("_loggingLevel");
         }
 
         public override void OnInspectorGUI() {
+            #region Logging
+
+            EditorGUILayout.PropertyField(_loggingLevel);
+
+            #endregion
+
             #region Base directory
 
-            DirectorySelector(_baseDirectory, "Resources",
-                "This directory is used to store the .asset files");
+            DirectorySelector(_baseDirectory, "Resources", "This directory is used to store the .asset files");
 
             if (!_resourcesFolder.IsMatch(_baseDirectory.stringValue)) {
-                EditorGUILayout.HelpBox(
-                    "This directory MUST contain a 'Resources' folder or be inside one",
+                EditorGUILayout.HelpBox("This directory MUST contain a 'Resources' folder or be inside one",
                     MessageType.Error);
             }
 
             #endregion
 
             Spacing();
-            
+
             #region Code gen directory
 
-            DirectorySelector(_codeGenDirectory, "Editor",
-                "This directory is used to store auto-generated files");
+            DirectorySelector(_codeGenDirectory, "Editor", "This directory is used to store auto-generated files");
 
             if (_editorFolder.IsMatch(_codeGenDirectory.stringValue)) {
                 EditorGUILayout.HelpBox("This directory MUST NOT contain an 'Editor' folder", MessageType.Error);
@@ -74,7 +79,7 @@ namespace me.caneva20.ConfigAssets.Editor {
             string description
         ) {
             EditorGUILayout.HelpBox(description, MessageType.None);
-            
+
             using (new EditorGUILayout.HorizontalScope()) {
                 EditorGUILayout.LabelField($"{property.displayName}", "Assets\\");
                 property.stringValue = EditorGUILayout.TextField(property.stringValue);
@@ -93,7 +98,7 @@ namespace me.caneva20.ConfigAssets.Editor {
 
         private static void Prop(SerializedProperty property, string description) {
             EditorGUILayout.HelpBox(description, MessageType.None);
-            
+
             EditorGUILayout.PropertyField(property);
         }
 

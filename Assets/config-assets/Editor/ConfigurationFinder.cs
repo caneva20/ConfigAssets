@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using me.caneva20.ConfigAssets.Exceptions;
-using UnityEngine;
+using me.caneva20.ConfigAssets.Logging;
 
 namespace me.caneva20.ConfigAssets.Editor {
     internal static class ConfigurationFinder {
@@ -34,7 +34,8 @@ namespace me.caneva20.ConfigAssets.Editor {
         }
 
         private static string FindCSharpFile(Type type) {
-            var csFiles = Directory.GetFiles(@"Assets" + Path.DirectorySeparatorChar, "*.cs", SearchOption.AllDirectories)
+            var csFiles = Directory
+               .GetFiles(@"Assets" + Path.DirectorySeparatorChar, "*.cs", SearchOption.AllDirectories)
                .Where(x => !x.EndsWith(".g.cs"))
                .Select(x => new {
                     FileName = x,
@@ -45,7 +46,7 @@ namespace me.caneva20.ConfigAssets.Editor {
                     try {
                         return IsSourceFile(type, x.Content);
                     } catch (InvalidNamespaceException e) {
-                        Debug.LogWarning(
+                        ConfigAssetLogger.LogWarning(
                             $"While looking for a config for {type.FullName}, the file {x.FileName} seemed like a potential config file, but is missing a valid namespace\n{e.Message}");
                         return false;
                     }

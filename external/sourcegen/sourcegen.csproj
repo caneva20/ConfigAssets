@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <AssemblyName>config-assets.sourcegen</AssemblyName>
-        <RootNamespace>me.caneva20.config-assets.sourcegen</RootNamespace>
+        <RootNamespace>ConfigAssets.Sourcegen</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

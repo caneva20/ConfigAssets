@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <RootNamespace>ConfigAssets.Abstractions</RootNamespace>
+        <AssemblyName>config-assets.abstractions</AssemblyName>
     </PropertyGroup>
 
 </Project>

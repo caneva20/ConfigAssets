@@ -1,0 +1,14 @@
+{
+    "name": "ConfigAssets",
+    "rootNamespace": "me.caneva20.ConfigAssets",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

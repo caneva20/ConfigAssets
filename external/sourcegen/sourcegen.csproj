@@ -13,7 +13,7 @@
     <Target Name="Copy to plugins" AfterTargets="Build">
         <ItemGroup>
             <PluginFiles Include="$(TargetDir)*.dll" />
-            <PluginDir Include="../../unity/Assets/config-assets/Plugins"/>
+            <PluginDir Include="../../unity/Assets/config-assets/Plugins" />
         </ItemGroup>
         
         <Message Text="Copying $(OutputPath)*.dll to @(PluginDir)" />

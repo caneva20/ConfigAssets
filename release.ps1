@@ -1,1 +1,1 @@
-git subtree split --prefix=Assets/config-assets --branch upm
+git subtree split --prefix=unity/Assets/config-assets --branch upm

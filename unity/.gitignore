@@ -277,3 +277,5 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains+all,rider,unity,windows,macos,linux
 Assets/Configurations/*
 Assets/Configurations.meta
+
+Assets/config-assets/Plugins/config-assets.sourcegen.dll

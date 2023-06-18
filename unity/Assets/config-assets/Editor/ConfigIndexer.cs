@@ -40,7 +40,6 @@ namespace me.caneva20.ConfigAssets.Editor {
 
         private static void DoEnhancement() {
             EnhanceConfigurations(Definitions);
-            SettingsProviderBuilder.Build(Definitions);
 
             GenerationStep = GenerationStep.PostEnhancement;
         }

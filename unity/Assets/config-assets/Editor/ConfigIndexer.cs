@@ -19,6 +19,7 @@ namespace me.caneva20.ConfigAssets.Editor {
 
         [DidReloadScripts]
         private static void OnScriptReload() {
+            return;
             switch (GenerationStep) {
                 case GenerationStep.Enhancement:
                     ConfigAssetLogger.LogVerbose("Enhancing configuration files");

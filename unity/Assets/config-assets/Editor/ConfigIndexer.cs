@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using me.caneva20.ConfigAssets.Loading;
 using me.caneva20.ConfigAssets.Logging;
@@ -7,48 +6,12 @@ using UnityEditor.Callbacks;
 
 namespace me.caneva20.ConfigAssets.Editor {
     public static class ConfigIndexer {
-        private const string GENERATION_STEP_KEY = "me.caneva20.config-assets.generation-step";
-
-        private static GenerationStep GenerationStep {
-            get => (GenerationStep)EditorPrefs.GetInt(GENERATION_STEP_KEY, (int)GenerationStep.Enhancement);
-            set => EditorPrefs.SetInt(GENERATION_STEP_KEY, (int)value);
-        }
-
         private static ConfigurationDefinition[] Definitions => ConfigurationFinder.FindConfigurations();
 
         [DidReloadScripts]
         private static void OnScriptReload() {
-            return;
-            switch (GenerationStep) {
-                case GenerationStep.Enhancement:
-                    ConfigAssetLogger.LogVerbose("Enhancing configuration files");
-                    DoEnhancement();
-                    break;
-                case GenerationStep.PostEnhancement:
-                    ConfigAssetLogger.LogVerbose("Finishing enhancements to configuration files");
-                    DoPostEnhancement();
-                    break;
-                case GenerationStep.Finished:
-                    ConfigAssetLogger.LogVerbose("Enhancements to configuration files finished");
-                    GenerationStep = GenerationStep.Enhancement;
-                    break;
-            }
-
-            RefreshAssetDatabase();
+            //UpdatePreloadList(); //TODO
         }
-
-        private static void DoEnhancement() {
-            EnhanceConfigurations(Definitions);
-
-            GenerationStep = GenerationStep.PostEnhancement;
-        }
-
-        private static void DoPostEnhancement() {
-            UpdatePreloadList();
-
-            GenerationStep = GenerationStep.Finished;
-        }
-
 
         private static void UpdatePreloadList() {
             var definitions = Definitions;
@@ -106,20 +69,6 @@ namespace me.caneva20.ConfigAssets.Editor {
                 preloadedAssets.Add(asset);
 
                 PlayerSettings.SetPreloadedAssets(preloadedAssets.ToArray());
-            }
-        }
-
-        private static void EnhanceConfigurations(ConfigurationDefinition[] configurationTypes) {
-            RefreshAssetDatabase();
-        }
-
-        private static void RefreshAssetDatabase() {
-            ConfigAssetLogger.LogVerbose("Refreshing the asset database");
-
-            try {
-                AssetDatabase.Refresh();
-            } catch (Exception) {
-                ConfigAssetLogger.LogWarning("Failed to refresh asset database");
             }
         }
     }

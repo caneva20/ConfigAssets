@@ -1,22 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <AssemblyName>config-assets.sourcegen</AssemblyName>
         <RootNamespace>ConfigAssets.Sourcegen</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0" />
     </ItemGroup>
 
     <Target Name="Copy to plugins" AfterTargets="Build">
         <ItemGroup>
-            <PluginFiles Include="$(TargetDir)*.dll" />
+            <PluginFiles Include="$(TargetDir)$(AssemblyName).dll" />
             <PluginDir Include="../../unity/Assets/config-assets/Plugins" />
         </ItemGroup>
-        
-        <Message Text="Copying $(OutputPath)*.dll to @(PluginDir)" />
+
+        <Message Text="Copying @(PluginFiles) to @(PluginDir)" />
         <Copy SourceFiles="@(PluginFiles)" DestinationFolder="@(PluginDir)" />
     </Target>
 

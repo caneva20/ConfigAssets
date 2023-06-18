@@ -10,7 +10,7 @@ namespace me.caneva20.ConfigAssets.Editor {
 
         [DidReloadScripts]
         private static void OnScriptReload() {
-            //UpdatePreloadList(); //TODO
+            UpdatePreloadList();
         }
 
         private static void UpdatePreloadList() {

@@ -12,40 +12,22 @@ using UnityEditor;
 
 namespace me.caneva20.ConfigAssets.Loading {
     public static class ConfigLoader {
-        private static Defaults _defaults;
-
-        internal static Defaults LoadDefaults() {
-            if (_defaults == null) {
-                _defaults = (Defaults)Load(typeof(Defaults), Path.Join("Configurations", "Resources"), "Defaults.asset");
-            }
-
-            return _defaults;
-        }
+        private static readonly string BaseDirectory = Path.Join("configurations", "Resources", Path.DirectorySeparatorChar.ToString());
 
         public static object Load(Type type) {
-            LoadDefaults();
-
-            return Load(type, MakeSaveDirectoryPath(), MakeAssetName(type));
+            return Load(type, BaseDirectory, MakeAssetName(type));
         }
 
         private static object Load(Type type, string dirPath, string assetName) {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
             foreach (var assetGuid in AssetDatabase.FindAssets($"t:{type.Name}")) {
                 AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(assetGuid), type);
             }
-        #endif
+#endif
 
             var config = Resources.FindObjectsOfTypeAll(type).FirstOrDefault();
 
             return config ? config : CreateConfigAsset(type, dirPath, assetName);
-        }
-
-        private static string MakeSaveDirectoryPath() {
-            if (_defaults.BaseDirectory.EndsWith("/") || _defaults.BaseDirectory.EndsWith(@"\")) {
-                return _defaults.BaseDirectory;
-            }
-
-            return _defaults.BaseDirectory + Path.DirectorySeparatorChar;
         }
 
         private static string MakeAssetName(Type type) {
@@ -54,27 +36,13 @@ namespace me.caneva20.ConfigAssets.Loading {
             var assetName = $"{attribute?.FileName ?? type.Name}.asset";
             var ns = type.Namespace;
 
-            if (!_defaults.AppendNamespaceToFile || ns == null) {
-                return assetName;
-            }
-
-            string append;
-
-            if (_defaults.NameSpaceLength == -1) {
-                append = ns;
-            } else {
-                var split = ns.Split('.');
-
-                append = string.Join(".", split.Take(_defaults.NameSpaceLength));
-            }
-
-            return $"{append}.{assetName}";
+            return $"{ns}.{assetName}";
         }
 
         internal static object CreateConfigAsset(Type type, string dirPath, string assetName) {
             var config = ScriptableObject.CreateInstance(type);
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
             var absolutePath = Path.Combine(Application.dataPath, dirPath);
 
             if (!Directory.Exists(absolutePath)) {
@@ -86,7 +54,7 @@ namespace me.caneva20.ConfigAssets.Loading {
             AssetDatabase.CreateAsset(config, path);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-        #endif
+#endif
 
             return config;
         }

@@ -61,7 +61,7 @@ namespace me.caneva20.ConfigAssets.Logging {
         }
 
         private static bool CanLog(LoggingLevel level) {
-            var minLevel = (int)Defaults.Instance.LoggingLevel;
+            var minLevel = (int)Defaults.LoggingLevel;
 
             return (int)level <= minLevel;
         }

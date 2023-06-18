@@ -71,12 +71,6 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
-    "me.caneva20.test": {
-      "version": "file:Test",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 1,

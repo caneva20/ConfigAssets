@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using me.caneva20.ConfigAssets.Editor.Builders;
 using me.caneva20.ConfigAssets.Loading;
 using me.caneva20.ConfigAssets.Logging;
 using UnityEditor;
@@ -111,10 +110,6 @@ namespace me.caneva20.ConfigAssets.Editor {
         }
 
         private static void EnhanceConfigurations(ConfigurationDefinition[] configurationTypes) {
-            foreach (var configurationType in configurationTypes) {
-                EnhancedConfigurationBuilder.Build(configurationType);
-            }
-
             RefreshAssetDatabase();
         }
 

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ConfigAssets.Sourcegen.Models;
 using ConfigAssets.Sourcegen.Receivers;
+using ConfigAssets.Sourcegen.Utils;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
@@ -14,8 +13,6 @@ namespace ConfigAssets.Sourcegen.Generators {
     public class SettingsProviderGenerator : ISourceGenerator {
         private readonly SymbolDisplayFormat _symbolDisplayFormat =
             new SymbolDisplayFormat(typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
-
-        private const string TargetAttributeName = "me.caneva20.ConfigAssets.ConfigAttribute";
 
         public void Initialize(GeneratorInitializationContext context) {
             context.RegisterForSyntaxNotifications(() => new AttributeSyntaxReceiver("Config"));
@@ -61,53 +58,18 @@ public static class ConfigAssetsSettingsProvider {
         }
 
         private IEnumerable<ProviderDefinition> GetDefinitions(Compilation compilation, IEnumerable<ClassDeclarationSyntax> classes) {
-            var targetAttribute = compilation.GetTypeByMetadataName(TargetAttributeName);
-
-            foreach (var @class in classes) {
-                var semanticModel = compilation.GetSemanticModel(@class.SyntaxTree);
-
-                var classSymbol = semanticModel.GetDeclaredSymbol(@class);
-
-                if (classSymbol is null || classSymbol.IsAbstract | classSymbol.IsStatic) {
+            foreach (var (_, symbol, data) in ConfigurationFilter.FilterProviders(compilation, classes)) {
+                if (!data.EnableProvider) {
                     continue;
                 }
 
-                var attribute = classSymbol.GetAttributes()
-                    .FirstOrDefault(x => x.AttributeClass?.Equals(targetAttribute, SymbolEqualityComparer.Default) == true);
-
-                if (attribute == null) {
-                    continue;
-                }
-
-                var displayName = classSymbol.Name;
-                var scope = 1;
-                var keywords = Array.Empty<string>();
-
-                foreach (var pair in attribute.NamedArguments) {
-                    if (pair.Value.IsNull) {
-                        continue;
-                    }
-
-                    switch (pair.Key) {
-                        case "DisplayName":
-                            displayName = (string)pair.Value.Value;
-                            break;
-                        case "Scope":
-                            scope = (int)pair.Value.Value;
-                            break;
-                        case "Keywords":
-                            keywords = pair.Value.Values.Select(x => (string)x.Value).ToArray();
-                            break;
-                    }
-                }
-
-                var fullyQualifiedName = classSymbol.ToDisplayString(_symbolDisplayFormat);
+                var fullyQualifiedName = symbol.ToDisplayString(_symbolDisplayFormat);
                 yield return new ProviderDefinition {
                     Name = fullyQualifiedName.Replace(".", ""),
                     FullyQualifiedName = fullyQualifiedName,
-                    DisplayName = displayName,
-                    Keywords = keywords.Length == 0 ? "null" : $"new string[] {{{string.Join(", ", keywords.Select(x => @$"""{x}"""))}}}",
-                    Scope = scope
+                    DisplayName = string.IsNullOrWhiteSpace(data.DisplayName) ? symbol.Name : data.DisplayName,
+                    Keywords = data.Keywords.Length == 0 ? "null" : $"new string[] {{{string.Join(", ", data.Keywords.Select(x => @$"""{x}"""))}}}",
+                    Scope = data.Scope
                 };
             }
         }

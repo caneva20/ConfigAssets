@@ -1,4 +1,4 @@
-namespace me.caneva20.ConfigAssets.Logging {
+namespace ConfigAssets.Logging {
     public enum LoggingLevel {
         Error = 0,
         Warning = 1,

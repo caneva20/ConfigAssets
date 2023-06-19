@@ -1,6 +1,6 @@
 using System;
 
-namespace me.caneva20.ConfigAssets {
+namespace ConfigAssets {
     [AttributeUsage(AttributeTargets.Class)]
     public class ConfigAttribute : Attribute {
         public string FileName { get; set; }

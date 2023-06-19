@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using me.caneva20.ConfigAssets.Loading;
-using me.caneva20.ConfigAssets.Logging;
-using UnityEngine;
+using ConfigAssets.Loading;
+using ConfigAssets.Logging;
 
-namespace me.caneva20.ConfigAssets.Editor {
+namespace ConfigAssets.Editor {
     public static class ConfigIndexer {
         public static void UpdatePreloadList(Type[] configurationTypes) {
 #if UNITY_EDITOR

@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConfigAssets.Sourcegen.Utils {
     public static class ConfigurationFilter {
-        public const string ConfigAttributeName = "me.caneva20.ConfigAssets.ConfigAttribute";
+        public const string ConfigAttributeName = "ConfigAssets.ConfigAttribute";
 
         private static readonly SymbolDisplayFormat SymbolDisplayFormat =
             new SymbolDisplayFormat(typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace me.caneva20.ConfigAssets.Demo {
+namespace ConfigAssets.Demo {
     [Config(DisplayName = "ConfigAssets demo")]
     public partial class EnhanceDemo {
         [SerializeField] private string _myKeyToSomeService;

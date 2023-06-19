@@ -1,16 +1,9 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
 
-#endif
-
-[assembly: InternalsVisibleTo("ConfigAssets.Editor")]
-
-namespace me.caneva20.ConfigAssets.Loading {
+namespace ConfigAssets.Loading {
     public static class ConfigLoader {
         private static readonly string BaseDirectory = Path.Join("configurations", "Resources", Path.DirectorySeparatorChar.ToString());
 
@@ -20,8 +13,8 @@ namespace me.caneva20.ConfigAssets.Loading {
 
         private static object Load(Type type, string dirPath, string assetName) {
 #if UNITY_EDITOR
-            foreach (var assetGuid in AssetDatabase.FindAssets($"t:{type.Name}")) {
-                AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(assetGuid), type);
+            foreach (var assetGuid in UnityEditor.AssetDatabase.FindAssets($"t:{type.Name}")) {
+                UnityEditor.AssetDatabase.LoadAssetAtPath(UnityEditor.AssetDatabase.GUIDToAssetPath(assetGuid), type);
             }
 #endif
 
@@ -51,9 +44,9 @@ namespace me.caneva20.ConfigAssets.Loading {
 
             var path = Path.Join("Assets", dirPath, assetName);
 
-            AssetDatabase.CreateAsset(config, path);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            UnityEditor.AssetDatabase.CreateAsset(config, path);
+            UnityEditor.AssetDatabase.SaveAssets();
+            UnityEditor.AssetDatabase.Refresh();
 #endif
 
             return config;

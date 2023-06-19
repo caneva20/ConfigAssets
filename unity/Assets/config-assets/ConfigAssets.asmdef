@@ -1,6 +1,6 @@
 {
     "name": "ConfigAssets",
-    "rootNamespace": "me.caneva20.ConfigAssets",
+    "rootNamespace": "ConfigAssets",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

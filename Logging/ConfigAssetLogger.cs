@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace me.caneva20.ConfigAssets.Logging {
+namespace ConfigAssets.Logging {
     public static class ConfigAssetLogger {
         internal static void LogError(Exception exception, string message, Object context) {
             if (!CanLog(LoggingLevel.Error)) {

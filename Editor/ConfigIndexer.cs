@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ConfigAssets.Loading;
+using ConfigAssets.Infrastructure;
 using ConfigAssets.Logging;
 
 namespace ConfigAssets.Editor {

@@ -27,7 +27,7 @@ namespace ConfigAssets.Sourcegen.Generators {
 #if UNITY_EDITOR
 
 using ConfigAssets;
-using ConfigAssets.Loading;
+using ConfigAssets.Infrastructure;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;

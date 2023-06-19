@@ -4,7 +4,7 @@ using System.Linq;
 using ConfigAssets.Editor;
 using UnityEngine;
 
-namespace ConfigAssets.Loading {
+namespace ConfigAssets.Infrastructure {
     public static class ConfigLoader {
         private static string PackageDirectory => CreateStoragePackage();
 

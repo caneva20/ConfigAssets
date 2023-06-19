@@ -1,14 +1,15 @@
 using System;
 using System.IO;
 using System.Linq;
+using ConfigAssets.Editor;
 using UnityEngine;
 
 namespace ConfigAssets.Loading {
     public static class ConfigLoader {
-        private static readonly string BaseDirectory = Path.Join("configurations", "Resources", Path.DirectorySeparatorChar.ToString());
+        private static string PackageDirectory => CreateStoragePackage();
 
         public static object Load(Type type) {
-            return Load(type, BaseDirectory, MakeAssetName(type));
+            return Load(type, PackageDirectory + Path.DirectorySeparatorChar, MakeAssetName(type));
         }
 
         private static object Load(Type type, string dirPath, string assetName) {
@@ -25,7 +26,7 @@ namespace ConfigAssets.Loading {
 
         private static string MakeAssetName(Type type) {
             var attribute = ConfigAttribute.Find(type);
-
+ 
             var assetName = $"{attribute?.FileName ?? type.Name}.asset";
             var ns = type.Namespace;
 
@@ -35,21 +36,40 @@ namespace ConfigAssets.Loading {
         internal static object CreateConfigAsset(Type type, string dirPath, string assetName) {
             var config = ScriptableObject.CreateInstance(type);
 
+            var path = Path.Join(dirPath, assetName);
+
 #if UNITY_EDITOR
-            var absolutePath = Path.Combine(Application.dataPath, dirPath);
-
-            if (!Directory.Exists(absolutePath)) {
-                Directory.CreateDirectory(absolutePath);
+            try {
+                UnityEditor.AssetDatabase.CreateAsset(config, path);
+            } catch (UnityException e) {
+                Debug.Log(e);
             }
+#endif
+            RefreshAssets();
 
-            var path = Path.Join("Assets", dirPath, assetName);
+            return config;
+        }
 
-            UnityEditor.AssetDatabase.CreateAsset(config, path);
+        private static void RefreshAssets() {
+#if UNITY_EDITOR
             UnityEditor.AssetDatabase.SaveAssets();
             UnityEditor.AssetDatabase.Refresh();
 #endif
+        }
 
-            return config;
+        private static string CreateStoragePackage() {
+            var path = PackageCreator.Create("config-assets.generated",
+                "0.0.0",
+                "Config Assets Generated Files",
+                "Package used to hold generated files from ConfigAssets package");
+
+            var resourcesPath = Path.Combine(path, "Resources");
+
+            Directory.CreateDirectory(resourcesPath);
+
+            RefreshAssets();
+
+            return resourcesPath;
         }
     }
 }

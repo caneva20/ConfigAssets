@@ -279,3 +279,4 @@ Assets/Configurations/*
 Assets/Configurations.meta
 
 Assets/config-assets/Plugins/config-assets.sourcegen.dll
+Packages/config-assets.generated/*

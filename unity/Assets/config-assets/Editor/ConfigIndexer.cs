@@ -1,75 +1,58 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using me.caneva20.ConfigAssets.Loading;
 using me.caneva20.ConfigAssets.Logging;
-using UnityEditor;
-using UnityEditor.Callbacks;
+using UnityEngine;
 
 namespace me.caneva20.ConfigAssets.Editor {
     public static class ConfigIndexer {
-        private static ConfigurationDefinition[] Definitions => ConfigurationFinder.FindConfigurations();
+        public static void UpdatePreloadList(Type[] configurationTypes) {
+#if UNITY_EDITOR
+            var types = string.Join(", ", configurationTypes.Select(x => x.Name));
+            ConfigAssetLogger.LogVerbose($"Update preload list with '{types}'");
 
-        [DidReloadScripts]
-        private static void OnScriptReload() {
-            UpdatePreloadList();
-        }
+            var assets = UnityEditor.PlayerSettings.GetPreloadedAssets().ToList();
 
-        private static void UpdatePreloadList() {
-            var definitions = Definitions;
+            foreach (var type in configurationTypes) {
+                ConfigLoader.Load(type);
+                
+                var guids = UnityEditor.AssetDatabase.FindAssets($"t:{type}").ToList();
 
-            foreach (var definition in definitions) {
-                if (!definition.IsValid) {
+                if (guids.Count > 1) {
+                    PrintInvalidAssets(guids, type);
+
                     continue;
                 }
 
-                ConfigLoader.Load(definition.Type);
-            }
-
-            foreach (var definition in definitions) {
-                if (!definition.IsValid) {
-                    continue;
-                }
-
-                var guids = AssetDatabase.FindAssets($"t:{definition.Type}").ToList();
-
-                if (guids.Count == 0) {
-                    ConfigAssetLogger.LogInformation($"No assets of type {definition.Type.FullName} was found");
-                } else if (guids.Count > 1) {
-                    ConfigAssetLogger.LogError(
-                        $"Multiple assets of type {definition.Type.FullName} was found. Please delete all but 1. (Bellow is a list of all of them)");
-
-                    foreach (var g in guids) {
-                        var path = AssetDatabase.GUIDToAssetPath(g);
-                        var invalidAsset = AssetDatabase.LoadAssetAtPath(path, definition.Type);
-
-                        ConfigAssetLogger.LogError(
-                            $"This asset may be invalid for {definition.Type.FullName}. <Click this message to highlight it>",
-                            invalidAsset);
-                    }
-                }
-
-                if (guids.Count != 1) {
-                    continue;
-                }
-
-                var guid = guids.First();
-                var asset = AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(guid), definition.Type);
+                var guid = guids.Single();
+                var asset = UnityEditor.AssetDatabase.LoadAssetAtPath(UnityEditor.AssetDatabase.GUIDToAssetPath(guid), type);
 
                 if (asset == null) {
                     ConfigAssetLogger.LogError($"No asset found with guid {guid}");
                     continue;
                 }
 
-                var preloadedAssets = PlayerSettings.GetPreloadedAssets().ToList();
-                var isPreloaded = preloadedAssets.Contains(asset);
-
-                if (isPreloaded) {
-                    continue;
+                if (!assets.Contains(asset)) {
+                    assets.Add(asset);
                 }
-
-                preloadedAssets.Add(asset);
-
-                PlayerSettings.SetPreloadedAssets(preloadedAssets.ToArray());
             }
+
+            UnityEditor.PlayerSettings.SetPreloadedAssets(assets.ToArray());
+#endif
+        }
+
+        private static void PrintInvalidAssets(List<string> guids, Type type) {
+#if UNITY_EDITOR
+            ConfigAssetLogger.LogError($"Multiple assets of type {type} was found. Please delete all but 1. (Bellow is a list of all of them)");
+
+            foreach (var g in guids) {
+                var path = UnityEditor.AssetDatabase.GUIDToAssetPath(g);
+                var invalidAsset = UnityEditor.AssetDatabase.LoadAssetAtPath(path, type);
+
+                ConfigAssetLogger.LogError($"This asset may be invalid for {type}. <Click this message to highlight it>", invalidAsset);
+            }
+#endif
         }
     }
 }

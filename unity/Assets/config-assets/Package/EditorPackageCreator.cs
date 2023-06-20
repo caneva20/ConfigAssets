@@ -27,7 +27,8 @@ namespace ConfigAssets.Package {
     ""name"": ""{definition.Name}"",
     ""version"": ""{definition.Version}"",
     ""displayName"": ""{definition.DisplayName}"",
-    ""description"": ""{definition.Description}""
+    ""description"": ""{definition.Description}"",
+    ""author"": ""{definition.Author ?? ""}""
 }}";
 
             Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);

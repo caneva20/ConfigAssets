@@ -4,6 +4,7 @@
         public string Version { get; }
         public string DisplayName { get; }
         public string Description { get; }
+        public string Author { get; set; }
 
         public PackageDefinition(string name, string version, string displayName, string description) {
             Name = name;

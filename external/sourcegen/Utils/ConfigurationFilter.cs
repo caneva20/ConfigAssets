@@ -53,9 +53,6 @@ namespace ConfigAssets.Sourcegen.Utils {
         private static void ReadAttributeData(ConfigAttributeData data, AttributeData attribute) {
             foreach (var pair in attribute.NamedArguments.Where(x => !x.Value.IsNull)) {
                 switch (pair.Key) {
-                    case "FileName":
-                        data.FileName = (string)pair.Value.Value;
-                        break;
                     case "GenerateSingleton":
                         data.GenerateSingleton = (bool)pair.Value.Value!;
                         break;

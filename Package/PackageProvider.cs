@@ -10,7 +10,9 @@ namespace ConfigAssets.Package {
                 PackageType.GeneratedAssets, new PackageDefinition("config-assets.generated",
                     "0.0.0",
                     "Config Assets Generated Files",
-                    "Package used to hold generated files from ConfigAssets package")
+                    "CAREFUL! DO NOT REMOVE!\\n\\nThis package is used to hold generated files from ConfigAssets package\\n\\nRemoving this will also delete your saved configurations!") {
+                    Author = "ConfigAssets"
+                }
             }
         };
 
@@ -36,9 +38,9 @@ namespace ConfigAssets.Package {
             if (!_packageCreator.Exists(definition)) {
                 _packageCreator.Create(definition);
             }
-            
+
             var packageLocation = _packageCreator.GetLocation(definition);
-            
+
             return $"{packageLocation}/Resources/{resourceName}";
         }
 

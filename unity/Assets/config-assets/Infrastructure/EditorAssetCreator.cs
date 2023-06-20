@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-using System;
+using ConfigAssets.Metadata;
 using ConfigAssets.Package;
 using ConfigAssets.Package.Models;
 using UnityEditor;
@@ -16,12 +16,10 @@ namespace ConfigAssets.Infrastructure {
             _preloadedAssetService = preloadedAssetService;
         }
 
-        public object CreateAsset<T>(bool preload = false) where T : ScriptableObject {
-            var type = typeof(T);
-            var assetName = MakeAssetName(type);
-            var assetPath = _packageProvider.GetResourceLocation(PackageType.GeneratedAssets, assetName);
+        public object CreateAsset(AssetMetadata metadata, bool preload = false) {
+            var assetPath = _packageProvider.GetResourceLocation(PackageType.GeneratedAssets, metadata.AssetName);
 
-            var asset = ScriptableObject.CreateInstance(type);
+            var asset = ScriptableObject.CreateInstance(metadata.Type);
 
             AssetDatabase.CreateAsset(asset, assetPath);
 
@@ -32,10 +30,6 @@ namespace ConfigAssets.Infrastructure {
             }
 
             return asset;
-        }
-
-        private static string MakeAssetName(Type type) {
-            return $"{type.FullName}.asset";
         }
 
         private static void RefreshAssets() {

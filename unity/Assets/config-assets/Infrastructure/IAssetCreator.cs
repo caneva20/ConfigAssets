@@ -1,7 +1,7 @@
-using UnityEngine;
+using ConfigAssets.Metadata;
 
 namespace ConfigAssets.Infrastructure {
     public interface IAssetCreator {
-        object CreateAsset<T>(bool preload = false) where T : ScriptableObject;
+        object CreateAsset(AssetMetadata metadata, bool preload = false);
     }
 }

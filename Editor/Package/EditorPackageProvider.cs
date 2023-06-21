@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using ConfigAssets.Package;
 using ConfigAssets.Package.Models;
 
-namespace ConfigAssets.Package {
-    public class PackageProvider : IPackageProvider {
+namespace ConfigAssets.Editor.Package {
+    public class EditorPackageProvider : IPackageProvider {
         private static readonly Dictionary<PackageType, PackageDefinition> Definitions = new() {
             {
                 PackageType.GeneratedAssets, new PackageDefinition("config-assets.generated",
@@ -18,7 +19,7 @@ namespace ConfigAssets.Package {
 
         private readonly IPackageCreator _packageCreator;
 
-        public PackageProvider(IPackageCreator packageCreator) {
+        public EditorPackageProvider(IPackageCreator packageCreator) {
             _packageCreator = packageCreator;
         }
 

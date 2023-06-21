@@ -10,6 +10,9 @@
     "email": "caneva20@duck.com",
     "url": "https://caneva20.me"
   },
+  "documentationUrl": "https://github.com/caneva20/ConfigAssets",
+  "license": "MIT",
+  "licensesUrl": "https://github.com/caneva20/ConfigAssets/blob/master/LICENSE",
   "dependencies": {
     "com.unity.editorcoroutines": "1.0.0"
   }

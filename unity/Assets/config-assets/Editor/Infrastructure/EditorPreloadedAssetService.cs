@@ -1,9 +1,9 @@
-﻿#if UNITY_EDITOR
-using System.Linq;
+﻿using System.Linq;
+using ConfigAssets.Infrastructure;
 using UnityEditor;
 using UnityEngine;
 
-namespace ConfigAssets.Infrastructure {
+namespace ConfigAssets.Editor.Infrastructure {
     public class EditorPreloadedAssetService : IPreloadedAssetService {
         public void Add(Object asset) {
             var assets = PlayerSettings.GetPreloadedAssets().Where(x => x != null).ToList();
@@ -18,4 +18,3 @@ namespace ConfigAssets.Infrastructure {
         }
     }
 }
-#endif

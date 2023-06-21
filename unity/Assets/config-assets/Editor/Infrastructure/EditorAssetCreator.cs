@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+﻿using ConfigAssets.Infrastructure;
 using ConfigAssets.Metadata;
 using ConfigAssets.Package;
 using ConfigAssets.Package.Models;
@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace ConfigAssets.Infrastructure {
+namespace ConfigAssets.Editor.Infrastructure {
     public class EditorAssetCreator : IAssetCreator {
         private readonly IPackageProvider _packageProvider;
         private readonly IPreloadedAssetService _preloadedAssetService;
@@ -24,7 +24,7 @@ namespace ConfigAssets.Infrastructure {
             AssetDatabase.CreateAsset(asset, assetPath);
 
             RefreshAssets();
-            
+
             if (preload) {
                 _preloadedAssetService.Add(asset);
             }
@@ -39,4 +39,3 @@ namespace ConfigAssets.Infrastructure {
         }
     }
 }
-#endif

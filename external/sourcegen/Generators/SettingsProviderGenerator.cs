@@ -27,6 +27,7 @@ namespace ConfigAssets.Sourcegen.Generators {
 #if UNITY_EDITOR
 
 using ConfigAssets;
+using ConfigAssets.Metadata;
 using ConfigAssets.Infrastructure;
 using System.Collections.Generic;
 using UnityEditor;
@@ -34,9 +35,9 @@ using UnityEngine;
 using SettingsScope = UnityEditor.SettingsScope;
 
 public static class ConfigAssetsSettingsProvider {
-    private static SettingsProvider CreateProvider<T>(string name, SettingsScope scope, IEnumerable<string> keywords) where T : ScriptableObject {
+    private static SettingsProvider CreateProvider(AssetMetadata metadata, string name, SettingsScope scope, IEnumerable<string> keywords) {
         return new SettingsProvider($""Config assets/{name}"", scope, keywords) {
-            guiHandler = _ => Editor.CreateEditor((T)ConfigLoader.Load(typeof(T))).OnInspectorGUI()
+            guiHandler = _ => Editor.CreateEditor(Services.ConfigLoader.Load<ScriptableObject>(metadata)).OnInspectorGUI()
         };
     }
 ");
@@ -47,7 +48,7 @@ public static class ConfigAssetsSettingsProvider {
                 sb.Append($@"
     [SettingsProvider]
     public static SettingsProvider Create{provider.Name}Provider() {{
-        return CreateProvider<{provider.FullyQualifiedName}>(""{provider.DisplayName}"", (SettingsScope){provider.Scope}, {provider.Keywords});
+        return CreateProvider(ConfigAssetsMetadata.ConfigurationTypes[""{provider.FullyQualifiedName}""], ""{provider.DisplayName}"", (SettingsScope){provider.Scope}, {provider.Keywords});
     }}
 ");
             }

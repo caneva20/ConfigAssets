@@ -2,28 +2,22 @@ using System;
 
 namespace ConfigAssets.Utils {
     internal class EditorOnlyLazy<T> where T : class {
-        private readonly Func<T> _creator;
+        private readonly Lazy<T> _lazy;
 
         private T _instance;
 
         internal T Instance {
             get {
-                _instance ??= Get();
-
-                return _instance;
+#if UNITY_EDITOR
+                return _lazy.Instance;
+#else
+                return null;
+#endif
             }
         }
 
         internal EditorOnlyLazy(Func<T> creator) {
-            _creator = creator;
-        }
-
-        private T Get() {
-#if UNITY_EDITOR
-            return _creator();
-#else
-                return null;
-#endif
+            _lazy = new Lazy<T>(creator);
         }
     }
 }

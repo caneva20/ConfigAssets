@@ -1,0 +1,16 @@
+{
+    "name": "ConfigAssets.Demo",
+    "rootNamespace": "ConfigAssets",
+    "references": [
+        "GUID:30556ea2df4bfa44a846099247f79a8a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

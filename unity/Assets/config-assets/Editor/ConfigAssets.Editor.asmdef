@@ -1,0 +1,19 @@
+{
+    "name": "ConfigAssets.Editor",
+    "rootNamespace": "ConfigAssets",
+    "references": [
+        "GUID:30556ea2df4bfa44a846099247f79a8a",
+        "GUID:478a2357cc57436488a56e564b08d223"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

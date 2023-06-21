@@ -2,10 +2,11 @@
 using ConfigAssets.Package;
 using ConfigAssets.Package.Models;
 using UnityEditor.PackageManager;
-using UnityEngine;
 
 namespace ConfigAssets.Editor.Package {
     public class EditorPackageCreator : IPackageCreator {
+        private static string CurrentDirectory => Directory.GetCurrentDirectory();
+        
         public string GetLocation(PackageDefinition definition) {
             return Path.Combine("Packages", definition.Name);
         }
@@ -38,7 +39,7 @@ namespace ConfigAssets.Editor.Package {
         }
 
         private static string GetPackagePath(string name) {
-            return Path.Combine(Application.dataPath.Replace("Assets", ""), "Packages", name, "package.json");
+            return Path.Combine(CurrentDirectory, "Packages", name, "package.json");
         }
     }
 }

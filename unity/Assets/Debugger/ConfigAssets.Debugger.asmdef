@@ -1,0 +1,19 @@
+{
+    "name": "ConfigAssets.Debugger",
+    "rootNamespace": "ConfigAssets",
+    "references": [
+        "GUID:30556ea2df4bfa44a846099247f79a8a",
+        "GUID:fe86285cbea7384448ecf2d69a7ea8ed"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,8 +1,7 @@
 ﻿using ConfigAssets.Infrastructure;
-using ConfigAssets.Utils;
 
 namespace ConfigAssets {
     public static class Services {
-        public static IConfigLoader ConfigLoader => new Lazy<IConfigLoader>(() => new ConfigLoader()).Instance;
+        public static readonly IConfigLoader ConfigLoader = new ConfigLoader();
     }
 }

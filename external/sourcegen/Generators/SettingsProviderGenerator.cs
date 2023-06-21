@@ -36,6 +36,7 @@ using ConfigAssets.Infrastructure;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using static ConfigAssetsMetadata;
 using SettingsScope = UnityEditor.SettingsScope;
 
 public static class ConfigAssetsSettingsProvider {
@@ -50,7 +51,7 @@ public static class ConfigAssetsSettingsProvider {
                 sb.Append($@"
     [SettingsProvider]
     public static SettingsProvider Create{provider.Metadata.FullyQualifiedName.Sanitize()}Provider() {{
-        return CreateProvider(ConfigAssetsMetadata.ConfigurationTypes[""{provider.Metadata.FullyQualifiedName}""], ""{provider.DisplayName}"", (SettingsScope){provider.Scope}, {GetKeywords(provider.Keywords)});
+        return CreateProvider(ConfigurationTypes[""{provider.Metadata.FullyQualifiedName}""], ""{provider.DisplayName}"", (SettingsScope){provider.Scope}, {GetKeywords(provider.Keywords)});
     }}
 ");
             }

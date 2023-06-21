@@ -36,6 +36,7 @@ namespace ConfigAssets.Sourcegen.Generators {
 using UnityEngine;
 using ConfigAssets;
 using ConfigAssets.Infrastructure;
+using static ConfigAssetsMetadata;
 
 namespace {meta.Namespace} {{
     public partial class {meta.ClassName} : ScriptableObject {{
@@ -43,7 +44,7 @@ namespace {meta.Namespace} {{
         {(generateSingleton ? "public" : "private")} static {meta.ClassName} Instance {{
             get {{
                 if (_instance == null) {{
-                    _instance = Services.ConfigLoader.Load<{meta.ClassName}>(ConfigAssetsMetadata.ConfigurationTypes[""{meta.FullyQualifiedName}""]);
+                    _instance = Services.ConfigLoader.Load<{meta.ClassName}>(ConfigurationTypes[""{meta.FullyQualifiedName}""]);
                 }}
             
                 return _instance;

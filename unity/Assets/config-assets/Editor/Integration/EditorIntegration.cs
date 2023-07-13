@@ -21,7 +21,7 @@ namespace ConfigAssets.Editor.Integration {
 
         private static void CreateAssets() {
             foreach (var asset in GetAssets()) {
-                EditorServices.AssetCreator.CreateAsset(asset);
+                EditorServices.AssetCreator.CreateAsset(asset, true);
             }
         }
 

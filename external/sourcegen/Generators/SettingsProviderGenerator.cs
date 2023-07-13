@@ -48,10 +48,12 @@ public static class ConfigAssetsSettingsProvider {
 ");
 
             foreach (var provider in providers) {
+                var displayName = !string.IsNullOrWhiteSpace(provider.DisplayName) ? provider.DisplayName : provider.Metadata.ClassName; 
+                
                 sb.Append($@"
     [SettingsProvider]
     public static SettingsProvider Create{provider.Metadata.FullyQualifiedName.Sanitize()}Provider() {{
-        return CreateProvider(ConfigurationTypes[""{provider.Metadata.FullyQualifiedName}""], ""{provider.DisplayName}"", (SettingsScope){provider.Scope}, {GetKeywords(provider.Keywords)});
+        return CreateProvider(ConfigurationTypes[""{provider.Metadata.FullyQualifiedName}""], ""{displayName}"", (SettingsScope){provider.Scope}, {GetKeywords(provider.Keywords)});
     }}
 ");
             }

@@ -21,8 +21,13 @@ jobs:
         mkdir -p Package/Plugins
         echo '
         fileFormatVersion: 2
-        guid: 3e2c6cc4ecb7a2743bb79b11c213bf82
+        guid: 715467f5dbc801540ae9d03f075ae8a4
         folderAsset: yes
+        DefaultImporter:
+          externalObjects: {}
+          userData: 
+          assetBundleName: 
+          assetBundleVariant:
         ' > Package/Plugins.meta
         cp -R unity/Assets/config-assets Package/Plugins/
     

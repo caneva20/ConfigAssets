@@ -34,7 +34,7 @@ jobs:
     - name: Package Project
       run: |
           echo "Creating package.unitypackage"
-          dotnet ../tools/UnityPackageExporter.dll --project Plugins --output package.unitypackage --exclude ".*"
+          dotnet ../tools/UnityPackageExporter.dll Plugins package.unitypackage --skip-dependency-check
     
     - name: Publish artifact
       uses: actions/upload-artifact@master

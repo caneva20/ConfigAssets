@@ -23,16 +23,17 @@ jobs:
         echo "Plugins.meta" > metaList
         find Plugins/ -name \*.meta >> metaList
 
-    - name: Create package
-    - run: mkdir package
+    - name: Create package folder
+      run: mkdir package
 
-    - uses: pCYSl5EDgo/create-unitypackage@master
+    - name: Create package
+      uses: pCYSl5EDgo/create-unitypackage@master
       with:
         package-path: 'package/config-assets.unitypackage'
         include-files: metaList
     
     - name: Publish artifact
-    - uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@master
       with:
         path: package
         name: config-assets

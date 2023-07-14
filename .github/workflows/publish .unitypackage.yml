@@ -11,38 +11,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Setup dotnet
-      uses: actions/setup-dotnet@v3
+    - name: Setup Unity
+      uses: game-ci/unity-setup@v0.1
       with:
-        dotnet-version: 3.1.x
+        unity-version: 2022.3.1f1
     
-    - name: Create Plugins Directory
+    - name: Export Unity package
       run: |
-        mkdir -p Package/Plugins
-        echo '
-        fileFormatVersion: 2
-        guid: 715467f5dbc801540ae9d03f075ae8a4
-        folderAsset: yes
-        DefaultImporter:
-          externalObjects: {}
-          userData: 
-          assetBundleName: 
-          assetBundleVariant:
-        ' > Package/Plugins.meta
-        cp -R unity/Assets/config-assets Package/Plugins/
-    
-    - name: Install Unity Packager
-      run: |
-          git clone https://github.com/Lachee/Unity-Package-Exporter.git "../tools/unity-package-exporter"
-          dotnet publish -c Release -o ../tools "../tools/unity-package-exporter/UnityPackageExporter"
-    
-    - name: Package Project
-      run: |
-          echo "Creating package.unitypackage"
-          dotnet ../tools/UnityPackageExporter.dll Package config-assets.unitypackage --skip-dependency-check
+        mkdir export
+        /opt/unity/Editor/Unity \
+          -projectPath unity \
+          -quit -batchmode -nographics -logfile \
+          -exportPackage "Assets/config-assets" "export/config-assets.unitypackage"
     
     - name: Publish artifact
       uses: actions/upload-artifact@master
       with:
         name: Unity Package
-        path: config-assets.unitypackage
+        path: export/config-assets.unitypackage

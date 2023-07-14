@@ -22,7 +22,7 @@ jobs:
       run: |
         echo "Plugins.meta" > metaList
         find Plugins/ -name \*.meta >> metaList
-        echo metaList
+        cat metaList
 
     - name: Create package folder
       run: mkdir package

@@ -18,13 +18,13 @@ jobs:
     
     - name: Create Plugins Directory
       run: |
-        mkdir -p Plugins
+        mkdir -p Package/Plugins
         echo '
         fileFormatVersion: 2
         guid: 3e2c6cc4ecb7a2743bb79b11c213bf82
         folderAsset: yes
-        ' > Plugins.meta
-        cp -R unity/Assets/config-assets Plugins/
+        ' > Package/Plugins.meta
+        cp -R unity/Assets/config-assets Package/Plugins/
     
     - name: Install Unity Packager
       run: |
@@ -34,10 +34,10 @@ jobs:
     - name: Package Project
       run: |
           echo "Creating package.unitypackage"
-          dotnet ../tools/UnityPackageExporter.dll Plugins package.unitypackage --skip-dependency-check
+          dotnet ../tools/UnityPackageExporter.dll Package config-assets.unitypackage --skip-dependency-check
     
     - name: Publish artifact
       uses: actions/upload-artifact@master
       with:
         name: Unity Package
-        path: package.unitypackage
+        path: config-assets.unitypackage

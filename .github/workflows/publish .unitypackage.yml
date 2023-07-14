@@ -30,7 +30,7 @@ jobs:
     - name: Create package
       uses: pCYSl5EDgo/create-unitypackage@master
       with:
-        package-path: 'package/config-assets.unitypackage'
+        path: 'package/config-assets.unitypackage'
         include-files: metaList
     
     - name: Publish artifact

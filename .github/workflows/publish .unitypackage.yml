@@ -15,7 +15,11 @@ jobs:
     - name: Create Plugins Directory
       run: |
         mkdir -p Plugins
-        echo "fileFormatVersion: 2" > Plugins.meta
+        echo '
+        fileFormatVersion: 2
+        guid: 3e2c6cc4ecb7a2743bb79b11c213bf82
+        folderAsset: yes
+        ' > Plugins.meta
         cp -R unity/Assets/config-assets Plugins/
     
     - name: Create meta list

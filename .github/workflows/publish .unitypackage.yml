@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@v2
     
     - name: Create Plugins Directory
       run: |
@@ -22,24 +23,18 @@ jobs:
         ' > Plugins.meta
         cp -R unity/Assets/config-assets Plugins/
     
-    - name: Create meta list
+    - name: Install Unity Packager
       run: |
-        echo "Plugins.meta" > metaList
-        find Plugins/ -name \*.meta >> metaList
-
-    - name: Create package folder
+          git clone https://github.com/Lachee/Unity-Package-Exporter.git "../tools/unity-package-exporter"
+          dotnet publish -c Release -o ../tools "../tools/unity-package-exporter/UnityPackageExporter"
+    
+    - name: Package Project
       run: |
-        mkdir package
-        cat metaList
-
-    - name: Create package
-      uses: pCYSl5EDgo/create-unitypackage@master
-      with:
-        package-path: 'package/config-assets.unitypackage'
-        include-files: metaList
+          echo "Creating package.unitypackage"
+          dotnet ../tools/UnityPackageExporter.dll --project Plugins --output package.unitypackage --exclude ".*"
     
     - name: Publish artifact
       uses: actions/upload-artifact@master
       with:
-        path: package
-        name: config-assets
+        name: Unity Package
+        path: package.unitypackage

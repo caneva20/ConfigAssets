@@ -24,7 +24,9 @@ jobs:
         find Plugins/ -name \*.meta >> metaList
 
     - name: Create package folder
-      run: mkdir package
+      run: |
+        mkdir package
+        cat metaList
 
     - name: Create package
       uses: pCYSl5EDgo/create-unitypackage@master

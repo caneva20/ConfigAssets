@@ -1,17 +1,18 @@
 # Config Assets
 
-[![openupm](https://img.shields.io/npm/v/me.caneva20.config-assets?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/me.caneva20.config-assets/)
-
 Simple & Lightweight solution for managing configuration assets in Unity projects
 
 ## Install
 
-The package is available on the [openupm registry](https://openupm.com). It's recommended to install it
-via [openupm-cli](https://github.com/openupm/openupm-cli).
+1. Install `Editor Coroutines` from Unity's package manager
+    ```shell
+    com.unity.editorcoroutines
+    ```
+    
+    > You can access the package manager by going to `Window > Package Manager` at the top bar in Unity 
 
-```
-openupm add me.caneva20.config-assets
-```
+2. Download & import the latest `config-assets.unitypackage` from [here](https://github.com/caneva20/ConfigAssets/releases/latest)
+or the [releases](https://github.com/caneva20/ConfigAssets/releases) page.
 
 # Usage
 

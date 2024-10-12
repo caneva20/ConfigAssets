@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using ConfigAssets.Sourcegen.Models;
 using Microsoft.CodeAnalysis;
@@ -11,8 +12,8 @@ namespace ConfigAssets.Sourcegen.Utils {
         private static readonly SymbolDisplayFormat SymbolDisplayFormat =
             new SymbolDisplayFormat(typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
 
-        public static IEnumerable<(ClassDeclarationSyntax @class, ISymbol classSymbol, ConfigAttributeData data)> FilterProviders(Compilation compilation,
-            IEnumerable<ClassDeclarationSyntax> classes) {
+        public static IEnumerable<(ClassDeclarationSyntax @class, ISymbol classSymbol, ConfigAttributeData data)>
+            FilterProviders(Compilation compilation, IEnumerable<ClassDeclarationSyntax> classes) {
             var targetAttribute = compilation.GetType(ConfigAttributeName);
 
             foreach (var @class in classes) {
@@ -54,16 +55,19 @@ namespace ConfigAssets.Sourcegen.Utils {
             foreach (var pair in attribute.NamedArguments.Where(x => !x.Value.IsNull)) {
                 switch (pair.Key) {
                     case "GenerateSingleton":
-                        data.GenerateSingleton = (bool)pair.Value.Value!;
+                        Debug.Assert(pair.Value.Value != null, "pair.Value.Value != null");
+                        data.GenerateSingleton = (bool)pair.Value.Value;
                         break;
                     case "DisplayName":
                         data.DisplayName = (string)pair.Value.Value;
                         break;
                     case "Scope":
-                        data.Scope = (int)pair.Value.Value!;
+                        Debug.Assert(pair.Value.Value != null, "pair.Value.Value != null");
+                        data.Scope = (int)pair.Value.Value;
                         break;
                     case "EnableProvider":
-                        data.EnableProvider = (bool)pair.Value.Value!;
+                        Debug.Assert(pair.Value.Value != null, "pair.Value.Value != null");
+                        data.EnableProvider = (bool)pair.Value.Value;
                         break;
                     case "Keywords":
                         data.Keywords = pair.Value.Values.Select(x => (string)x.Value).ToArray();
@@ -75,7 +79,8 @@ namespace ConfigAssets.Sourcegen.Utils {
         private static void ReadMetadata(ConfigAttributeData data, ISymbol symbol) {
             data.Metadata.ClassName = symbol.Name;
             data.Metadata.FullyQualifiedName = GetFullyQualifiedName(symbol);
-            data.Metadata.Namespace = data.Metadata.FullyQualifiedName[..^(symbol.Name.Length + 1)];
+            data.Metadata.Namespace =
+                data.Metadata.FullyQualifiedName.Substring(0, data.Metadata.FullyQualifiedName.Length - (symbol.Name.Length + 1));
         }
     }
 }

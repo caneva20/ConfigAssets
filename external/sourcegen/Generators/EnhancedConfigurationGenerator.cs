@@ -46,7 +46,7 @@ namespace {meta.Namespace} {{
                 if (_instance == null) {{
                     _instance = Services.ConfigLoader.Load<{meta.ClassName}>(ConfigurationTypes[""{meta.FullyQualifiedName}""]);
                 }}
-            
+
                 return _instance;
             }}
         }}
@@ -57,9 +57,9 @@ namespace {meta.Namespace} {{
                 sb.AppendLine($"        public static {field.Type} {field.PropertyName} => Instance.{field.Name};");
             }
 
-            sb.Append(@$"
-    }}
-}}
+            sb.Append(@"
+    }
+}
 ");
 
             return sb.ToString();
@@ -79,10 +79,10 @@ namespace {meta.Namespace} {{
                 PropertyName = ConvertToPropertyName(x.Name)
             });
         }
-        
+
         private static string ConvertToPropertyName(string name) {
             name = name.Replace("m_", "").Replace("_", "");
-            return name[..1].ToUpper() + name[1..];
+            return char.ToUpper(name[0]) + name.Substring(1);
         }
 
         private struct MemberInfo {

@@ -48,8 +48,10 @@ public static class ConfigAssetsSettingsProvider {
 ");
 
             foreach (var provider in providers) {
-                var displayName = !string.IsNullOrWhiteSpace(provider.DisplayName) ? provider.DisplayName : provider.Metadata.ClassName; 
-                
+                var displayName = !string.IsNullOrWhiteSpace(provider.DisplayName)
+                    ? provider.DisplayName
+                    : provider.Metadata.ClassName;
+
                 sb.Append($@"
     [SettingsProvider]
     public static SettingsProvider Create{provider.Metadata.FullyQualifiedName.Sanitize()}Provider() {{
@@ -66,7 +68,9 @@ public static class ConfigAssetsSettingsProvider {
         }
 
         private static string GetKeywords(IReadOnlyCollection<string> keywords) {
-            return keywords.Count == 0 ? "null" : $"new string[] {{{string.Join(", ", keywords.Select(x => @$"""{x}"""))}}}";
+            return keywords.Count == 0
+                ? "null"
+                : $"new string[] {{{string.Join(", ", keywords.Select(x => $"\"{x}\""))}}}";
         }
     }
 }
